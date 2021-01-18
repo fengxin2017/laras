@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Foundation;
+namespace Laras\Foundation;
 
 class AliasLoader
 {

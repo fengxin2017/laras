@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MoneyMaker\Foundation\Bus;
+namespace Laras\Foundation\Bus;
 
 
 abstract class Job

@@ -4,7 +4,7 @@
 namespace App\Crontab\Jobs;
 
 
-use MoneyMaker\Crontab\AbstractCrontab;
+use Laras\Crontab\AbstractCrontab;
 
 class BarCrontab extends AbstractCrontab
 {

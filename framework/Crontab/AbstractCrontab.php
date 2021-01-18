@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Crontab;
+namespace Laras\Crontab;
 
 use Carbon\Carbon;
 use Exception;

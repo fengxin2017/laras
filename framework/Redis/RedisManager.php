@@ -1,17 +1,17 @@
 <?php
 
 
-namespace MoneyMaker\Redis;
+namespace Laras\Redis;
 
 
 use Closure;
 use Exception;
-use MoneyMaker\Facades\Config;
+use Laras\Facades\Config;
 use Redis;
 
 /**
  * Class RedisManager
- * @package MoneyMaker\Redis
+ * @package Laras\Redis
  * @mixin Redis
  */
 class RedisManager

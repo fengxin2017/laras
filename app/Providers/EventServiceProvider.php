@@ -6,7 +6,7 @@ use App\Events\Foo;
 use App\Listeners\FooListener;
 use App\Listeners\OnServerStart;
 use Illuminate\Events\EventServiceProvider as ServiceProvider;
-use MoneyMaker\Foundation\Application;
+use Laras\Foundation\Application;
 
 class EventServiceProvider extends ServiceProvider
 {

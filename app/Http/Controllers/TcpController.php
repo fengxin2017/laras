@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use MoneyMaker\Tcp\Request;
+use Laras\Tcp\Request;
 
 class TcpController extends Controller
 {

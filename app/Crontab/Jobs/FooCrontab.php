@@ -3,7 +3,7 @@
 namespace App\Crontab\Jobs;
 
 use App\Annotations\Crontab;
-use MoneyMaker\Crontab\AbstractCrontab;
+use Laras\Crontab\AbstractCrontab;
 
 /**
  * Class FooCrontab

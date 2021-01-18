@@ -1,11 +1,11 @@
 <?php
 
-namespace MoneyMaker\WebSocket;
+namespace Laras\WebSocket;
 
-use MoneyMaker\Http\Response as MoneyMakerResponse;
+use Laras\Http\Response as LarasResponse;
 use Swoole\Http\Response as SwooleResponse;
 
-class Response extends MoneyMakerResponse
+class Response extends LarasResponse
 {
     /**
      * @var Response $webSocketResponse

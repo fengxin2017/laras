@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Foundation\Events;
+namespace Laras\Foundation\Events;
 
 use Exception;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace MoneyMaker\Commands;
+namespace Laras\Commands;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use MoneyMaker\Foundation\Application;
-use MoneyMaker\Server\HttpServer;
-use MoneyMaker\Server\TcpServer;
-use MoneyMaker\Server\WebsocketServer;
-use MoneyMaker\Watcher\Inotify;
+use Laras\Foundation\Application;
+use Laras\Server\HttpServer;
+use Laras\Server\TcpServer;
+use Laras\Server\WebsocketServer;
+use Laras\Watcher\Inotify;
 use ReflectionException;
 use Swoole\Coroutine;
 use Swoole\Process;
@@ -92,8 +92,8 @@ class Portal extends Command
     protected function configure()
     {
         $this->setName('start');
-        $this->setDescription('MoneyMaker server start command.');
-        $this->setHelp(sprintf('%s ./bin/maker start', PHP_BINARY));
+        $this->setDescription('Laras server start command.');
+        $this->setHelp(sprintf('%s ./bin/laras start', PHP_BINARY));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

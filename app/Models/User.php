@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use MoneyMaker\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use MoneyMaker\Database\Model;
-use MoneyMaker\Support\Traits\Auth\Authenticatable;
+use Laras\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Laras\Database\Model;
+use Laras\Support\Traits\Auth\Authenticatable;
 
 class User extends Model implements AuthenticatableContract
 {

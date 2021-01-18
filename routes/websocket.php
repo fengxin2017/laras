@@ -1,5 +1,5 @@
 <?php
-use MoneyMaker\Router\Router;
+use Laras\Router\Router;
 use App\Http\Controllers\WebSocketController;
 
 Router::get('test',[WebSocketController::class,'test']);

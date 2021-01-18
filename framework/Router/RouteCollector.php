@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Router;
+namespace Laras\Router;
 
 use FastRoute\DataGenerator;
 use FastRoute\RouteParser;

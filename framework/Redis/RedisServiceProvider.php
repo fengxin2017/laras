@@ -1,17 +1,17 @@
 <?php
 
 
-namespace MoneyMaker\Redis;
+namespace Laras\Redis;
 
 use Exception;
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Contracts\Foundation\Application;
-use MoneyMaker\Facades\Config;
+use Laras\Contracts\Foundation\Application;
+use Laras\Facades\Config;
 use Swoole\Timer;
 
 /**
  * Class RedisServiceProvider
- * @package MoneyMaker\Redis
+ * @package Laras\Redis
  */
 class RedisServiceProvider extends ServiceProvider
 {

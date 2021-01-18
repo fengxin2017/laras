@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Foundation;
+namespace Laras\Foundation;
 
 use App\Providers\EventServiceProvider;
 use Dotenv\Dotenv;
@@ -10,14 +10,14 @@ use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Env;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use MoneyMaker\Config\ConfigServiceProvider;
-use MoneyMaker\Container\Container;
-use MoneyMaker\Contracts\Container\Container as ContainerContract;
-use MoneyMaker\Contracts\Foundation\Application as ApplicationContract;
-use MoneyMaker\Contracts\Foundation\Application as ApplicationContrat;
-use MoneyMaker\Foundation\Bootstrap\RegisterFacades;
-use MoneyMaker\Foundation\Http\Kernel;
-use MoneyMaker\Pipe\Pipeline;
+use Laras\Config\ConfigServiceProvider;
+use Laras\Container\Container;
+use Laras\Contracts\Container\Container as ContainerContract;
+use Laras\Contracts\Foundation\Application as ApplicationContract;
+use Laras\Contracts\Foundation\Application as ApplicationContrat;
+use Laras\Foundation\Bootstrap\RegisterFacades;
+use Laras\Foundation\Http\Kernel;
+use Laras\Pipe\Pipeline;
 use ReflectionException;
 use Swoole\Coroutine\Context;
 use Swoole\Process;

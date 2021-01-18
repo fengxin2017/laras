@@ -4,8 +4,8 @@
 namespace App\SwooleEvents;
 
 
-use MoneyMaker\Contracts\Foundation\Application;
-use MoneyMaker\Server\WebsocketServer;
+use Laras\Contracts\Foundation\Application;
+use Laras\Server\WebsocketServer;
 use Swoole\Process;
 
 class OnWebSocketServerStart

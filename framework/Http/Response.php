@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Http;
+namespace Laras\Http;
 
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -8,8 +8,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
-use MoneyMaker\Database\Model;
-use MoneyMaker\Facades\Config;
+use Laras\Database\Model;
+use Laras\Facades\Config;
 use ReflectionException;
 use ReflectionObject;
 use stdClass;

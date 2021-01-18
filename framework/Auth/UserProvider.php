@@ -1,12 +1,12 @@
 <?php
 
 
-namespace MoneyMaker\Auth;
+namespace Laras\Auth;
 
 
-use MoneyMaker\Contracts\Auth\UserProvider as UserProviderContract;
-use MoneyMaker\Facades\Config;
-use MoneyMaker\Facades\Redis;
+use Laras\Contracts\Auth\UserProvider as UserProviderContract;
+use Laras\Facades\Config;
+use Laras\Facades\Redis;
 
 class UserProvider implements UserProviderContract
 {

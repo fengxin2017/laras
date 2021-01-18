@@ -5,7 +5,7 @@ namespace Illuminate\Events;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Foundation\Application;
+use Laras\Foundation\Application;
 use ReflectionException;
 
 class EventServiceProvider extends ServiceProvider

@@ -1,11 +1,11 @@
 <?php
 
-namespace MoneyMaker\WebSocket;
+namespace Laras\WebSocket;
 
-use MoneyMaker\Http\Request as MoneyMakerRequest;
+use Laras\Http\Request as LarasRequest;
 use Swoole\Http\Request as SwooleRequest;
 
-class Request extends MoneyMakerRequest
+class Request extends LarasRequest
 {
     /**
      * @var Request $webSocketRequest

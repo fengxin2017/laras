@@ -1,10 +1,10 @@
 <?php
 
-namespace MoneyMaker\Contracts\Pipe;
+namespace Laras\Contracts\Pipe;
 
 use Closure;
-use MoneyMaker\Http\Request;
-use MoneyMaker\Http\Response;
+use Laras\Http\Request;
+use Laras\Http\Response;
 
 interface PipelineContract
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace MoneyMaker\Annotation;
+namespace Laras\Annotation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Exception;
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Foundation\Application;
+use Laras\Foundation\Application;
 use ReflectionClass;
 use Roave\BetterReflection\BetterReflection;
 use Roave\BetterReflection\TypesFinder\FindPropertyType;

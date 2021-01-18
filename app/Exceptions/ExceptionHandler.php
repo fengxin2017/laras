@@ -2,9 +2,9 @@
 
 namespace App\Exceptions;
 
-use MoneyMaker\Exceptions\ExceptionHandler as Handler;
-use MoneyMaker\Http\Request;
-use MoneyMaker\Http\Response;
+use Laras\Exceptions\ExceptionHandler as Handler;
+use Laras\Http\Request;
+use Laras\Http\Response;
 use Throwable;
 
 class ExceptionHandler extends Handler

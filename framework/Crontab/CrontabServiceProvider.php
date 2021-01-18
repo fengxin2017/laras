@@ -1,15 +1,15 @@
 <?php
 
-namespace MoneyMaker\Crontab;
+namespace Laras\Crontab;
 
 use App\Annotations\Crontab;
 use App\Crontab\Kernel;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Annotation\AnnotationCollector;
-use MoneyMaker\Contracts\Foundation\Application;
-use MoneyMaker\Facades\Log;
-use MoneyMaker\Facades\Redis;
+use Laras\Annotation\AnnotationCollector;
+use Laras\Contracts\Foundation\Application;
+use Laras\Facades\Log;
+use Laras\Facades\Redis;
 use Swoole\Coroutine;
 use Swoole\Timer;
 use Throwable;

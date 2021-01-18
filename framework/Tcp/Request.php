@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MoneyMaker\Tcp;
+namespace Laras\Tcp;
 
 
 use Swoole\Coroutine\Server\Connection;

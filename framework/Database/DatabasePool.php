@@ -1,13 +1,13 @@
 <?php
 
 
-namespace MoneyMaker\Database;
+namespace Laras\Database;
 
 
 use Exception;
-use MoneyMaker\Facades\Config;
-use MoneyMaker\Foundation\Application;
-use MoneyMaker\Pool\Pool;
+use Laras\Facades\Config;
+use Laras\Foundation\Application;
+use Laras\Pool\Pool;
 use Swoole\Coroutine\Channel;
 
 class DatabasePool extends Pool

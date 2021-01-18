@@ -1,12 +1,12 @@
 <?php
 
 
-namespace MoneyMaker\Auth;
+namespace Laras\Auth;
 
 
-use MoneyMaker\Contracts\Auth\Authenticatable;
-use MoneyMaker\Facades\Redis;
-use MoneyMaker\Facades\Request;
+use Laras\Contracts\Auth\Authenticatable;
+use Laras\Facades\Redis;
+use Laras\Facades\Request;
 
 class AuthManager
 {

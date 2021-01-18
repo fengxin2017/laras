@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MoneyMaker\Contracts\Pool;
+namespace Laras\Contracts\Pool;
 
 
 Interface Pool

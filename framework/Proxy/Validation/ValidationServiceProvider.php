@@ -4,8 +4,8 @@ namespace Illuminate\Validation;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Facades\Config;
-use MoneyMaker\Foundation\Application;
+use Laras\Facades\Config;
+use Laras\Foundation\Application;
 
 class ValidationServiceProvider extends ServiceProvider implements DeferrableProvider
 {

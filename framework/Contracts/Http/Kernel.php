@@ -1,7 +1,7 @@
 <?php
-namespace MoneyMaker\Contracts\Http;
+namespace Laras\Contracts\Http;
 
-use MoneyMaker\Foundation\Application;
+use Laras\Foundation\Application;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
 

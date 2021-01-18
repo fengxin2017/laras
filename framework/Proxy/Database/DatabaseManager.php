@@ -9,8 +9,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\ConfigurationUrlParser;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use MoneyMaker\Facades\Config;
-use MoneyMaker\Foundation\Application;
+use Laras\Facades\Config;
+use Laras\Foundation\Application;
 use PDO;
 
 /**

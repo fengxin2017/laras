@@ -1,17 +1,17 @@
 <?php
 
 
-namespace MoneyMaker\Redis;
+namespace Laras\Redis;
 
 
-use MoneyMaker\Container\Container;
-use MoneyMaker\Facades\Config;
-use MoneyMaker\Pool\Pool;
+use Laras\Container\Container;
+use Laras\Facades\Config;
+use Laras\Pool\Pool;
 use Swoole\Coroutine\Channel;
 
 /**
  * Class RedisPool
- * @package MoneyMaker\Redis
+ * @package Laras\Redis
  */
 class RedisPool extends Pool
 {

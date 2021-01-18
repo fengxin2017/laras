@@ -7,13 +7,13 @@ use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Translation\TranslationServiceProvider;
 use Illuminate\Validation\ValidationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
-use MoneyMaker\Annotation\AnnotationServiceProvider;
-use MoneyMaker\Auth\AuthServiceProvider;
-use MoneyMaker\Crontab\CrontabServiceProvider;
-use MoneyMaker\Database\DatabaseServiceProvider;
-use MoneyMaker\Redis\RedisServiceProvider;
+use Laras\Annotation\AnnotationServiceProvider;
+use Laras\Auth\AuthServiceProvider;
+use Laras\Crontab\CrontabServiceProvider;
+use Laras\Database\DatabaseServiceProvider;
+use Laras\Redis\RedisServiceProvider;
 use App\Providers\RouterServiceProvider;
-use MoneyMaker\Support\RateLimitorServiceProvider;
+use Laras\Support\RateLimitorServiceProvider;
 
 return [
     /*
@@ -55,7 +55,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'name' => 'moneymaker',
+    'name' => 'Laras',
     /*
     |--------------------------------------------------------------------------
     | Application Debug In Console
@@ -117,7 +117,7 @@ return [
     */
     'providers' => [
         /*
-         * MoneyMaker framework Service Providers...
+         * Laras framework Service Providers...
          */
         AnnotationServiceProvider::class,
         LogServiceProvider::class,
@@ -150,18 +150,18 @@ return [
     */
     'aliases' => [
         'Arr' => \Illuminate\Support\Arr::class,
-        'Auth' => \MoneyMaker\Facades\Auth::class,
-        'Config' => \MoneyMaker\Facades\Config::class,
-        'DB' => \MoneyMaker\Facades\DB::class,
-        'Log' => \MoneyMaker\Facades\Log::class,
-        'Redis' => \MoneyMaker\Facades\Redis::class,
-        'Request' => \MoneyMaker\Facades\Request::class,
-        'Response' => \MoneyMaker\Facades\Response::class,
-        'Translator' => \MoneyMaker\Facades\Translator::class,
-        'ValidatorFactory' => \MoneyMaker\Facades\ValidatorFactory::class,
-        'Storage' => \MoneyMaker\Facades\Storage::class,
-        'View' => \MoneyMaker\Facades\View::class,
-        'Mail' => \MoneyMaker\Facades\Mail::class,
-        'Hash' => \MoneyMaker\Facades\Hash::class
+        'Auth' => \Laras\Facades\Auth::class,
+        'Config' => \Laras\Facades\Config::class,
+        'DB' => \Laras\Facades\DB::class,
+        'Log' => \Laras\Facades\Log::class,
+        'Redis' => \Laras\Facades\Redis::class,
+        'Request' => \Laras\Facades\Request::class,
+        'Response' => \Laras\Facades\Response::class,
+        'Translator' => \Laras\Facades\Translator::class,
+        'ValidatorFactory' => \Laras\Facades\ValidatorFactory::class,
+        'Storage' => \Laras\Facades\Storage::class,
+        'View' => \Laras\Facades\View::class,
+        'Mail' => \Laras\Facades\Mail::class,
+        'Hash' => \Laras\Facades\Hash::class
     ],
 ];

@@ -1,20 +1,20 @@
 <?php
 
 
-namespace MoneyMaker\Database;
+namespace Laras\Database;
 
 use Exception;
 use Illuminate\Database\Connectors\MySqlConnector;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Contracts\Foundation\Application;
-use MoneyMaker\Facades\Config;
+use Laras\Contracts\Foundation\Application;
+use Laras\Facades\Config;
 use PDOException;
 use Swoole\Timer;
 
 /**
  * Class DatabaseServiceProvider
- * @package MoneyMaker\Database
+ * @package Laras\Database
  */
 class DatabaseServiceProvider extends ServiceProvider
 {

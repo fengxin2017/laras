@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MoneyMaker\Annotation;
+namespace Laras\Annotation;
 
 use ReflectionClass;
 use ReflectionMethod;

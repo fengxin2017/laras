@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Http;
+namespace Laras\Http;
 
 use Swoole\Http\Request as SwooleRequest;
 

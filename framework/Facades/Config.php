@@ -1,12 +1,12 @@
 <?php
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
 use Illuminate\Contracts\Config\Repository;
 
 /**
  * Class Config
- * @package MoneyMaker\Facades
+ * @package Laras\Facades
  * @method static get($key, $default = null)
  * @method static set($key, $value)
  */

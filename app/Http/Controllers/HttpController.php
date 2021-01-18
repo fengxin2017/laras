@@ -9,18 +9,20 @@ use App\Annotations\Middleware;
 use App\Http\Middleware\Jim;
 use App\Http\Middleware\Tool;
 use App\Jobs\FooJob;
+use App\Mails\TestMail;
 use App\Models\User;
 use App\Test\Foo;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Validation\ValidationException;
-use MoneyMaker\Facades\DB;
-use MoneyMaker\Facades\Redis;
-use MoneyMaker\Facades\Storage;
-use MoneyMaker\Facades\View;
-use MoneyMaker\Http\Request;
-use MoneyMaker\Http\Response;
+use Laras\Facades\DB;
+use Laras\Facades\Mail;
+use Laras\Facades\Redis;
+use Laras\Facades\Storage;
+use Laras\Facades\View;
+use Laras\Http\Request;
+use Laras\Http\Response;
 
 /**
  * Class TestController
@@ -59,6 +61,7 @@ class HttpController extends Controller
 
     public function response(Response $response, Request $request)
     {
+        //Mail::to('2169046620@qq.com')->send(new TestMail());
         // 响应一个字符串
         return 'string';
         // 响应DB

@@ -4,8 +4,8 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Translation\Translator;
-use MoneyMaker\Facades\DB;
-use MoneyMaker\Foundation\Application;
+use Laras\Facades\DB;
+use Laras\Foundation\Application;
 use Swoole\Coroutine;
 
 if (!function_exists('wrap')) {

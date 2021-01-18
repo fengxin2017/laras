@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Fig\Http\Message\StatusCodeInterface;
-use MoneyMaker\Facades\Config;
-use MoneyMaker\Facades\Redis;
-use MoneyMaker\Http\Request;
-use MoneyMaker\Http\Response;
+use Laras\Facades\Config;
+use Laras\Facades\Redis;
+use Laras\Http\Request;
+use Laras\Http\Response;
 
 class RateLimitor
 {

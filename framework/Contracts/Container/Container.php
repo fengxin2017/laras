@@ -1,5 +1,5 @@
 <?php
-namespace MoneyMaker\Contracts\Container;
+namespace Laras\Contracts\Container;
 use Closure;
 use Illuminate\Contracts\Container\Container as IlluminateContainer;
 

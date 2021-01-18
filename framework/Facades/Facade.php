@@ -1,11 +1,11 @@
 <?php
 
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
 
 use Exception;
-use MoneyMaker\Foundation\Application;
+use Laras\Foundation\Application;
 use Illuminate\Support\Traits\ForwardsCalls;
 
 Abstract class Facade

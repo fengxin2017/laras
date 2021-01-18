@@ -2,8 +2,8 @@
 
 namespace App\Events;
 
-use MoneyMaker\Foundation\Events\Dispatchable;
-use MoneyMaker\Support\Event;
+use Laras\Foundation\Events\Dispatchable;
+use Laras\Support\Event;
 
 class Foo extends Event
 {

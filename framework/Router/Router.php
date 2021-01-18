@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Router;
+namespace Laras\Router;
 
 use App\Annotations\Middleware;
 use Exception;
@@ -9,11 +9,11 @@ use FastRoute\Dispatcher\GroupCountBased;
 use Illuminate\Container\Util;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Arr;
-use MoneyMaker\Annotation\AnnotationCollector;
-use MoneyMaker\Foundation\Application;
-use MoneyMaker\Http\Request;
-use MoneyMaker\Http\Response;
-use MoneyMaker\Pipe\Pipeline;
+use Laras\Annotation\AnnotationCollector;
+use Laras\Foundation\Application;
+use Laras\Http\Request;
+use Laras\Http\Response;
+use Laras\Pipe\Pipeline;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -23,7 +23,7 @@ use Throwable;
 
 /**
  * Class Router
- * @package MoneyMaker\Router
+ * @package Laras\Router
  *
  * @method static void addRoute($httpMethod, string $route, $handler, array $options = [])
  * @method static void addGroup($prefix, callable $callback, array $options = [])

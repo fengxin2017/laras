@@ -1,12 +1,12 @@
 <?php
 
 
-namespace MoneyMaker\Database;
+namespace Laras\Database;
 
 
 use Closure;
 use Exception;
-use MoneyMaker\Facades\Config;
+use Laras\Facades\Config;
 use PDO;
 
 class DatabaseManager

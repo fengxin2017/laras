@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Annotations\Inject;
 use App\Test\Bar;
-use MoneyMaker\Foundation\Bus\Job;
+use Laras\Foundation\Bus\Job;
 
 class FooJob extends Job
 {

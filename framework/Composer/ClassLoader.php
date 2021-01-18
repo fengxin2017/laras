@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Composer;
+namespace Laras\Composer;
 
 use Composer\Autoload\ClassLoader as ComposerClassLoader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -9,7 +9,7 @@ use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class ClassLoader
- * @package MoneyMaker\Composer
+ * @package Laras\Composer
  */
 class ClassLoader
 {

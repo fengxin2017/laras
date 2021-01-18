@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MoneyMaker\Support\Traits\Auth;
+namespace Laras\Support\Traits\Auth;
 
 
 trait Authenticatable

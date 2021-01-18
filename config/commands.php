@@ -1,6 +1,6 @@
 <?php
 
 return [
-    \MoneyMaker\Commands\Portal::class,
+    \Laras\Commands\Portal::class,
     \App\Commands\TestCommand::class
 ];

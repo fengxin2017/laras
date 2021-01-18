@@ -1,13 +1,13 @@
 <?php
 
 
-namespace MoneyMaker\Auth;
+namespace Laras\Auth;
 
 
 use Exception;
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Container\Container;
-use MoneyMaker\Foundation\Application;
+use Laras\Container\Container;
+use Laras\Foundation\Application;
 
 class AuthServiceProvider extends ServiceProvider
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace MoneyMaker\Foundation\Bootstrap;
+namespace Laras\Foundation\Bootstrap;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
-use MoneyMaker\Contracts\Foundation\Application;
-use MoneyMaker\Foundation\AliasLoader;
+use Laras\Contracts\Foundation\Application;
+use Laras\Foundation\AliasLoader;
 
 class RegisterFacades
 {

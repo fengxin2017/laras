@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
 /**
  * @method static \Symfony\Component\Finder\SplFileInfo[] allFiles(string $directory, bool $hidden = false)

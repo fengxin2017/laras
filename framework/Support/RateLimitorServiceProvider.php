@@ -1,9 +1,9 @@
 <?php
 
-namespace MoneyMaker\Support;
+namespace Laras\Support;
 
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Facades\Redis;
+use Laras\Facades\Redis;
 use Swoole\Timer;
 
 class RateLimitorServiceProvider extends ServiceProvider
@@ -34,7 +34,7 @@ class RateLimitorServiceProvider extends ServiceProvider
         $this->milliseconds = $this->app['config']['ratelimitor.milliseconds'];
         $this->count = (int)$this->app['config']['ratelimitor.count'];
         $this->capacity = (int)(1000 / $this->milliseconds) * $this->count;
-        $this->key = 'maker:capacity';
+        $this->key = 'laras:capacity';
     }
 
     public function boot()

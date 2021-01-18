@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Validation\ValidationException;
-use MoneyMaker\Facades\ValidatorFactory;
+use Laras\Facades\ValidatorFactory;
 
 class Controller
 {

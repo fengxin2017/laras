@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Database;
+namespace Laras\Database;
 
 use PDOException;
 use Throwable;

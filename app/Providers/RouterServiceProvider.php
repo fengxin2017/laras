@@ -5,9 +5,9 @@ namespace App\Providers;
 
 
 use FastRoute\Dispatcher\GroupCountBased;
-use MoneyMaker\Router\RouteCollector;
-use MoneyMaker\Router\RouterServiceProvider as BaseRouterServiceProvider;
-use MoneyMaker\Server\WebsocketServer;
+use Laras\Router\RouteCollector;
+use Laras\Router\RouterServiceProvider as BaseRouterServiceProvider;
+use Laras\Server\WebsocketServer;
 
 class RouterServiceProvider extends BaseRouterServiceProvider
 {

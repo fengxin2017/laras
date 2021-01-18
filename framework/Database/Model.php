@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MoneyMaker\Database;
+namespace Laras\Database;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 

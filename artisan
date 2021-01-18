@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use MoneyMaker\Composer\ClassLoader;
+use Laras\Composer\ClassLoader;
 use Symfony\Component\Console\Application;
 
 ini_set('display_errors', 'on');

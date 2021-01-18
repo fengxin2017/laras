@@ -1,11 +1,11 @@
 <?php
 
 
-namespace MoneyMaker\Server;
+namespace Laras\Server;
 
 
-use MoneyMaker\Facades\Config;
-use MoneyMaker\Foundation\Http\Kernel;
+use Laras\Facades\Config;
+use Laras\Foundation\Http\Kernel;
 use Swoole\Coroutine\Server;
 use Swoole\Coroutine\Server\Connection;
 use Swoole\Exception;

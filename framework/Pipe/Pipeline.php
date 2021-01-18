@@ -1,12 +1,12 @@
 <?php
 
-namespace MoneyMaker\Pipe;
+namespace Laras\Pipe;
 
 use Closure;
-use MoneyMaker\Http\Request;
-use MoneyMaker\Http\Response;
+use Laras\Http\Request;
+use Laras\Http\Response;
 use Throwable;
-use MoneyMaker\Contracts\Pipe\PipelineContract;
+use Laras\Contracts\Pipe\PipelineContract;
 use Exception;
 
 class Pipeline implements PipelineContract

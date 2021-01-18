@@ -1,15 +1,14 @@
 <?php
 
 
-namespace MoneyMaker\Router;
+namespace Laras\Router;
 
 
 use FastRoute\DataGenerator\GroupCountBased as DataGenerator;
-use FastRoute\Dispatcher\GroupCountBased;
 use FastRoute\RouteParser\Std;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Foundation\Application;
+use Laras\Foundation\Application;
 use ReflectionException;
 
 class RouterServiceProvider extends ServiceProvider
@@ -36,6 +35,5 @@ class RouterServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
     }
 }

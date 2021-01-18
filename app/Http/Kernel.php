@@ -3,7 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\TrimStrings;
-use MoneyMaker\Foundation\Http\Kernel as HttpKernel;
+use Laras\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {

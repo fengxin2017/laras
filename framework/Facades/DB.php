@@ -1,20 +1,20 @@
 <?php
 
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
 
 use Closure;
 use Exception;
 use Illuminate\Database\DatabaseManager;
-use MoneyMaker\Foundation\Application;
+use Laras\Foundation\Application;
 use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
 use Throwable;
 
 /**
  * Class DB
- * @package MoneyMaker\Facades
+ * @package Laras\Facades
  * @method static first(string $sql,array $bindings = [])
  * @method static \Illuminate\Database\ConnectionInterface connection(string $name = null)
  * @method static \Illuminate\Database\Query\Builder table(string $table, string $as = null)

@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
 
 /**

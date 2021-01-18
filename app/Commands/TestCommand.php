@@ -11,7 +11,7 @@ class TestCommand extends Command
     protected function configure()
     {
         $this->setName('test');
-        $this->setDescription('MoneyMaker test command');
+        $this->setDescription('Laras test command');
         $this->setHelp(sprintf('%s ./bin/maker test', PHP_BINARY));
     }
 

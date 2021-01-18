@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MoneyMaker\Contracts\Auth;
+namespace Laras\Contracts\Auth;
 
 /**
  * Interface AuthGuard

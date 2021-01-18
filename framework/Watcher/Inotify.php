@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Watcher;
+namespace Laras\Watcher;
 
 use Swoole\Event;
 use Swoole\Timer;

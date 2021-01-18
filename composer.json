@@ -1,5 +1,5 @@
 {
-    "name": "fengxin/moneymaker",
+    "name": "fengxin/laras",
     "type": "library",
     "description": "A framework based on laravel used swoole.",
     "license": "MIT",
@@ -35,7 +35,7 @@
     "autoload": {
         "psr-4": {
             "App\\" : "app/",
-            "MoneyMaker\\" : "framework/"
+            "Laras\\" : "framework/"
         },
         "files": [
             "framework/Support/helpers.php"

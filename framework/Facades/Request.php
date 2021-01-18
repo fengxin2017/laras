@@ -1,13 +1,13 @@
 <?php
 
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
-use MoneyMaker\Http\Request as HttpRequest;
+use Laras\Http\Request as HttpRequest;
 
 /**
  * Class Request
- * @package MoneyMaker\Facades
+ * @package Laras\Facades
  * @method static get(string $key = null)
  * @method static post(string $key = null)
  * @method static file(string $key = null)

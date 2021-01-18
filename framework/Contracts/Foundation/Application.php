@@ -1,8 +1,8 @@
 <?php
 
-namespace MoneyMaker\Contracts\Foundation;
+namespace Laras\Contracts\Foundation;
 
-use MoneyMaker\Contracts\Container\Container;
+use Laras\Contracts\Container\Container;
 
 Interface Application extends Container
 {

@@ -1,13 +1,13 @@
 <?php
 
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
-use MoneyMaker\Http\Response as MoneyMakerResponse;
+use Laras\Http\Response as LarasResponse;
 
 /**
  * Class Response
- * @package MoneyMaker\Facades
+ * @package Laras\Facades
  * @method static setCookies(string $key, string $value = '', int $expire = 0, string $path = '/', string $domain = '', bool $secure = false, bool $httponly = false, string $samesite = '', string $priority = '')
  * @method static getCookies()
  * @method static setHeader(string $key, $value)
@@ -24,6 +24,6 @@ class Response extends Facade
 {
     public function getAccessor(): string
     {
-        return MoneyMakerResponse::class;
+        return LarasResponse::class;
     }
 }

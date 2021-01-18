@@ -1,15 +1,15 @@
 <?php
 
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
 
 use Exception;
-use MoneyMaker\Auth\AuthManager;
+use Laras\Auth\AuthManager;
 
 /**
  * Class Auth
- * @package MoneyMaker\Facades
+ * @package Laras\Facades
  * @method static AuthManager setId(int $userId)
  * @method static int id()
  * @method static bool check()

@@ -1,11 +1,11 @@
 <?php
 
-namespace MoneyMaker\Exceptions;
+namespace Laras\Exceptions;
 
 use Illuminate\Validation\ValidationException;
-use MoneyMaker\Facades\Config;
-use MoneyMaker\Http\Request;
-use MoneyMaker\Http\Response;
+use Laras\Facades\Config;
+use Laras\Http\Request;
+use Laras\Http\Response;
 use Throwable;
 
 class ExceptionHandler

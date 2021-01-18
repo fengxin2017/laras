@@ -4,9 +4,8 @@
 namespace App\SwooleEvents;
 
 
-use App\Annotations\Inject;
-use MoneyMaker\Contracts\Foundation\Application;
-use MoneyMaker\Server\TcpServer;
+use Laras\Contracts\Foundation\Application;
+use Laras\Server\TcpServer;
 use Swoole\Process;
 
 class OnTcpServerStart

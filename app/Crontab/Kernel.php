@@ -6,7 +6,7 @@ use App\Crontab\Jobs\BarCrontab;
 use App\Crontab\Jobs\FooCrontab;
 use App\Crontab\Jobs\TestCrontab;
 use App\Models\User;
-use MoneyMaker\Crontab\Kernel as CrontabKernel;
+use Laras\Crontab\Kernel as CrontabKernel;
 
 class Kernel extends CrontabKernel
 {

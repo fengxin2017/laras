@@ -1,10 +1,10 @@
 <?php
 
 
-namespace MoneyMaker\Pool;
+namespace Laras\Pool;
 
-use MoneyMaker\Contracts\Foundation\Application;
-use MoneyMaker\Contracts\Pool\Pool as PoolContract;
+use Laras\Contracts\Foundation\Application;
+use Laras\Contracts\Pool\Pool as PoolContract;
 use Swoole\Coroutine\Channel;
 
 Abstract class Pool implements PoolContract

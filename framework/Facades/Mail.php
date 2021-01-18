@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
 /**
  * @method static \Illuminate\Mail\Mailer mailer(string|null $name = null)

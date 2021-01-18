@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MoneyMaker\Foundation\Http;
+namespace Laras\Foundation\Http;
 
 use App\Exceptions\ExceptionHandler;
 use App\Http\Controllers\TcpController;
@@ -12,16 +12,16 @@ use Fig\Http\Message\StatusCodeInterface;
 use Illuminate\Container\Util;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\View\View;
-use MoneyMaker\Contracts\Foundation\Application;
-use MoneyMaker\Contracts\Http\Kernel as KernelContract;
-use MoneyMaker\Facades\Log;
-use MoneyMaker\Http\Request;
-use MoneyMaker\Http\Response;
-use MoneyMaker\Pipe\Pipeline;
-use MoneyMaker\Router\Router;
-use MoneyMaker\Tcp\Request as TcpReqeust;
-use MoneyMaker\WebSocket\Request as WebSocketRequest;
-use MoneyMaker\WebSocket\Response as WebSocketResponse;
+use Laras\Contracts\Foundation\Application;
+use Laras\Contracts\Http\Kernel as KernelContract;
+use Laras\Facades\Log;
+use Laras\Http\Request;
+use Laras\Http\Response;
+use Laras\Pipe\Pipeline;
+use Laras\Router\Router;
+use Laras\Tcp\Request as TcpReqeust;
+use Laras\WebSocket\Request as WebSocketRequest;
+use Laras\WebSocket\Response as WebSocketResponse;
 use ReflectionClass;
 use ReflectionException;
 use Swoole\Coroutine\Server\Connection;
@@ -64,30 +64,30 @@ class Kernel implements KernelContract
      */
     public function handle(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse)
     {
-        $moneyMakerRequest = new Request($swooleRequest);
-        $moneyMakerResponse = new Response($swooleResponse);
-        $this->bindRequest($moneyMakerRequest);
-        $this->bindResponse($moneyMakerResponse);
+        $larasRequest = new Request($swooleRequest);
+        $larasResponse = new Response($swooleResponse);
+        $this->bindRequest($larasRequest);
+        $this->bindResponse($larasResponse);
 
         try {
             $response = $this->app->make(Pipeline::class)
-                ->send($moneyMakerRequest, $moneyMakerResponse)
+                ->send($larasRequest, $larasResponse)
                 ->through($this->middleware)
                 ->then($this->dispatchToRouter());
 
-            $moneyMakerResponse->setChunkLimit($this->app['config']['server.http.buffer_output_size']);
+            $larasResponse->setChunkLimit($this->app['config']['server.http.buffer_output_size']);
 
             if ($response === Dispatcher::METHOD_NOT_ALLOWED) {
-                $moneyMakerResponse->setStatus(StatusCodeInterface::STATUS_METHOD_NOT_ALLOWED);
-                $moneyMakerResponse->setContent('METHOD NOT ALLOWED!');
-                $moneyMakerResponse->send();
+                $larasResponse->setStatus(StatusCodeInterface::STATUS_METHOD_NOT_ALLOWED);
+                $larasResponse->setContent('METHOD NOT ALLOWED!');
+                $larasResponse->send();
                 return;
             }
 
             if ($response === Dispatcher::NOT_FOUND) {
-                $moneyMakerResponse->setStatus(StatusCodeInterface::STATUS_NOT_FOUND);
-                $moneyMakerResponse->setContent('ROUTE NOT FOUND!');
-                $moneyMakerResponse->send();
+                $larasResponse->setStatus(StatusCodeInterface::STATUS_NOT_FOUND);
+                $larasResponse->setContent('ROUTE NOT FOUND!');
+                $larasResponse->send();
                 return;
             }
 
@@ -97,30 +97,30 @@ class Kernel implements KernelContract
             }
 
             if ($response instanceof View) {
-                $moneyMakerResponse->setHeader('Content-type', 'text/html');
+                $larasResponse->setHeader('Content-type', 'text/html');
             }
 
             if ($response instanceof StreamedResponse) {
-                $moneyMakerResponse->handleStreamedResponse($response);
+                $larasResponse->handleStreamedResponse($response);
                 return;
             }
 
             if ($response instanceof BinaryFileResponse) {
-                $moneyMakerResponse->handleBinaryFileResponse($response);
+                $larasResponse->handleBinaryFileResponse($response);
                 return;
             }
 
-            $moneyMakerResponse->setContent($response);
-            $moneyMakerResponse->send();
+            $larasResponse->setContent($response);
+            $larasResponse->send();
         } catch (Throwable $throwable) {
             $this->log($throwable);
-            /**@var Response $moneyMakerResponse */
-            $moneyMakerResponse = $this->app->make(ExceptionHandler::class)->handle(
+            /**@var Response $larasResponse */
+            $larasResponse = $this->app->make(ExceptionHandler::class)->handle(
                 $throwable,
-                $moneyMakerRequest,
-                $moneyMakerResponse
+                $larasRequest,
+                $larasResponse
             );
-            $moneyMakerResponse->send();
+            $larasResponse->send();
         }
     }
 
@@ -136,27 +136,27 @@ class Kernel implements KernelContract
     }
 
     /**
-     * @param Request $moneyMakerRequest
+     * @param Request $larasRequest
      */
-    public function bindRequest(Request $moneyMakerRequest)
+    public function bindRequest(Request $larasRequest)
     {
         $this->app->coBind(
             Request::class,
-            function () use ($moneyMakerRequest) {
-                return $moneyMakerRequest;
+            function () use ($larasRequest) {
+                return $larasRequest;
             }
         );
     }
 
     /**
-     * @param Response $moneyMakerResponse
+     * @param Response $larasResponse
      */
-    public function bindResponse(Response $moneyMakerResponse)
+    public function bindResponse(Response $larasResponse)
     {
         $this->app->coBind(
             Response::class,
-            function () use ($moneyMakerResponse) {
-                return $moneyMakerResponse;
+            function () use ($larasResponse) {
+                return $larasResponse;
             }
         );
     }

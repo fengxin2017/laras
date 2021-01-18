@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\HttpController;
-use MoneyMaker\Router\Router;
+use Laras\Router\Router;
 
 
 Router::addGroup('/v1', function () {

@@ -5,7 +5,7 @@ namespace App\SwooleEvents;
 
 
 use App\Annotations\Inject;
-use MoneyMaker\Contracts\Foundation\Application;
+use Laras\Contracts\Foundation\Application;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 

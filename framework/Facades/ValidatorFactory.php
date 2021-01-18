@@ -1,11 +1,11 @@
 <?php
 
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
 /**
  * Class ValidatorFactory
- * @package MoneyMaker\Facades
+ * @package Laras\Facades
  * @method static \Illuminate\Validation\Validator make(array $data, array $rules, array $messages = [], array $customAttributes = [])
  */
 class ValidatorFactory extends Facade

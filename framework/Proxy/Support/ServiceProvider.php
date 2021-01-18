@@ -9,7 +9,7 @@ use Illuminate\Contracts\Foundation\CachesRoutes;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Database\Eloquent\Factory as ModelFactory;
 use Illuminate\View\Compilers\BladeCompiler;
-use MoneyMaker\Foundation\Application;
+use Laras\Foundation\Application;
 
 abstract class ServiceProvider
 {

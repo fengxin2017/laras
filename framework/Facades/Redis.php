@@ -1,15 +1,15 @@
 <?php
 
 
-namespace MoneyMaker\Facades;
+namespace Laras\Facades;
 
 
-use MoneyMaker\Redis\RedisManager;
+use Laras\Redis\RedisManager;
 use Redis as NativeRedis;
 
 /**
  * Class Redis
- * @package MoneyMaker\Facades
+ * @package Laras\Facades
  * @method static get($key)
  * @method static set($key, $value, array $timeout = null)
  * @method static incr($key)

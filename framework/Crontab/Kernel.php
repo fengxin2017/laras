@@ -1,12 +1,12 @@
 <?php
 
 
-namespace MoneyMaker\Crontab;
+namespace Laras\Crontab;
 
 
 /**
  * Class Kernel
- * @package MoneyMaker\Crontab
+ * @package Laras\Crontab
  */
 abstract class Kernel
 {

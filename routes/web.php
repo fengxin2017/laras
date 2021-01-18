@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\HttpController;
-use MoneyMaker\Router\Router;
+use Laras\Router\Router;
 
 Router::get('index',[HttpController::class,'index']);
 Router::get('inject/{name}',[HttpController::class,'inject']);

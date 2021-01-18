@@ -1,11 +1,11 @@
 <?php
 
-namespace MoneyMaker\Config;
+namespace Laras\Config;
 
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Config\Repository as RepositoryContract;
 use Illuminate\Support\ServiceProvider;
-use MoneyMaker\Foundation\Application;
+use Laras\Foundation\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Finder\Finder;
 use SplFileInfo;

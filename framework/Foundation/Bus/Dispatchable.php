@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Foundation\Bus;
+namespace Laras\Foundation\Bus;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;

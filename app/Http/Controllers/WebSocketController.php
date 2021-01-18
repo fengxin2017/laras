@@ -4,8 +4,8 @@
 namespace App\Http\Controllers;
 
 
-use MoneyMaker\WebSocket\Request;
-use MoneyMaker\WebSocket\Response;
+use Laras\WebSocket\Request;
+use Laras\WebSocket\Response;
 
 class WebSocketController extends Controller
 {
@@ -35,8 +35,8 @@ websocket.onerror = function (evt, e) {
 </script>
 HTML;
 //        return $response->setHeader('Content-type', 'text/html')->setContent($content);
-        \MoneyMaker\Facades\Response::setHeader('Content-type', 'text/html');
-        return \MoneyMaker\Facades\Response::setContent($content);
+        \Laras\Facades\Response::setHeader('Content-type', 'text/html');
+        return \Laras\Facades\Response::setContent($content);
     }
 
     public function hello(Request $request, Response $response)

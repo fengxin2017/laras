@@ -5,8 +5,8 @@ namespace App\Http\Middleware;
 
 
 use Closure;
-use MoneyMaker\Http\Request;
-use MoneyMaker\Http\Response;
+use Laras\Http\Request;
+use Laras\Http\Response;
 
 class TrimStrings
 {

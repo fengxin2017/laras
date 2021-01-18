@@ -1,8 +1,8 @@
 <?php
 
-namespace MoneyMaker\Support;
+namespace Laras\Support;
 
-use MoneyMaker\Foundation\Events\Dispatchable;
+use Laras\Foundation\Events\Dispatchable;
 
 class Event
 {

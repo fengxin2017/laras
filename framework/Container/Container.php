@@ -1,6 +1,6 @@
 <?php
 
-namespace MoneyMaker\Container;
+namespace Laras\Container;
 
 use App\Annotations\Inject;
 use Closure;
@@ -8,8 +8,8 @@ use Exception;
 use Illuminate\Container\Container as IlluminateContainer;
 use Illuminate\Container\Util;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use MoneyMaker\Annotation\AnnotationCollector;
-use MoneyMaker\Contracts\Container\Container as MoneyMakerContainerContract;
+use Laras\Annotation\AnnotationCollector;
+use Laras\Contracts\Container\Container as LarasContainerContract;
 use ReflectionException;
 use ReflectionObject;
 use ReflectionParameter;
@@ -17,9 +17,9 @@ use Swoole\Coroutine;
 
 /**
  * Class Container
- * @package MoneyMaker\Container
+ * @package Laras\Container
  */
-class Container extends IlluminateContainer implements MoneyMakerContainerContract
+class Container extends IlluminateContainer implements LarasContainerContract
 {
     /**
      * @var array

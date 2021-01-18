@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\DatabaseManager as IlluminateDatabaseManager;
-use MoneyMaker\Database\DatabaseManager;
+use Laras\Database\DatabaseManager;
 
 return [
     'driver' => IlluminateDatabaseManager::class,
@@ -15,8 +15,8 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'port' => '3306',
-            'host' => '192.168.20.10',
-            'database' => 'practise',
+            'host' => '192.168.10.10',
+            'database' => 'practice',
             'username' => 'homestead',
             'password' => 'secret',
             'charset' => 'utf8mb4',
