@@ -12,7 +12,7 @@ class TestCommand extends Command
     {
         $this->setName('test');
         $this->setDescription('Laras test command');
-        $this->setHelp(sprintf('%s ./bin/maker test', PHP_BINARY));
+        $this->setHelp(sprintf('%s artisan test', PHP_BINARY));
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
