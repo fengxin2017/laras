@@ -5,7 +5,9 @@ namespace App\Commands;
 
 use Illuminate\Encryption\Encrypter;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class KeyGenerateCommand extends Command
@@ -13,6 +15,7 @@ class KeyGenerateCommand extends Command
     protected function configure()
     {
         $this->setName('key:generate');
+        $this->addOption('env', 'e', InputOption::VALUE_OPTIONAL, 'The environment the command should run under, this feature requires Laravel 5.2+');
         $this->setDescription('Set the application key');
         $this->setHelp(sprintf('%s artisan key:generate', PHP_BINARY));
     }
@@ -45,6 +48,10 @@ class KeyGenerateCommand extends Command
     protected function writeNewEnvironmentFileWith($key)
     {
         $path = ROOT_PATH . DIRECTORY_SEPARATOR . '.env';
+
+        if (($input = new ArgvInput)->hasParameterOption('--env')) {
+            $path = $path . '.' . $input->getParameterOption('--env');
+        }
 
         file_put_contents(
             $path,
