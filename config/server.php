@@ -13,27 +13,10 @@ use App\SwooleEvents\OnHandShake;
 
 
 return [
-
-    'tcp' => [
-        'worker_number' => 2,
-        'listen' => '0.0.0.0',
-        'port' => 9504,
-        'ssl' => false,
-        'setting' => [],
-        'on_worker_start' => [
-            OnTcpWorkerStart::class, 'handle'
-        ],
-        'on_worker_stop' => [
-            OnTcpWorkerStop::class, 'handle'
-        ],
-        'on_server_start' => [
-            OnTcpServerStart::class, 'handle'
-        ]
-    ],
     'http' => [
         'worker_number' => 2,
         'listen' => '0.0.0.0',
-        'port' => 9503,
+        'port' => 9501,
         'ssl' => false,
         'setting' => [],
         'buffer_output_size' => 2 * 1024 * 1024,
@@ -50,7 +33,7 @@ return [
     'websocket' => [
         'worker_number' => 2,
         'listen' => '0.0.0.0',
-        'port' => 9505,
+        'port' => 9502,
         'ssl' => false,
         'setting' => [],
         'route_prefix' => 'websocket',
@@ -65,6 +48,22 @@ return [
         ],
         'on_hand_shake' => [
             OnHandShake::class,'handle'
+        ]
+    ],
+    'tcp' => [
+        'worker_number' => 2,
+        'listen' => '0.0.0.0',
+        'port' => 9503,
+        'ssl' => false,
+        'setting' => [],
+        'on_worker_start' => [
+            OnTcpWorkerStart::class, 'handle'
+        ],
+        'on_worker_stop' => [
+            OnTcpWorkerStop::class, 'handle'
+        ],
+        'on_server_start' => [
+            OnTcpServerStart::class, 'handle'
         ]
     ],
 ];

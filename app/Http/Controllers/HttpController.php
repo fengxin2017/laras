@@ -38,6 +38,8 @@ class HttpController extends Controller
 
     public function index()
     {
+        //$user = User::query()->first();
+        //return $user;
 //        $user = DB::table('users')->first();
         //return $user;
 //        return DB::table('users')->get();
@@ -120,7 +122,7 @@ class HttpController extends Controller
     }
 
     /**
-     * http://192.168.10.10:9503/validates?id=3&name=foo
+     * http://192.168.10.10:9501/validates?id=3&name=foo
      *
      * @param Request $request
      * @return string

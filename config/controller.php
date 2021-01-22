@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'enable_pool' => true,
+    'enable_pool' => false,
     'pool_number' => 150
 ];
