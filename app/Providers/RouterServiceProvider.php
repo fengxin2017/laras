@@ -7,6 +7,7 @@ namespace App\Providers;
 use FastRoute\Dispatcher\GroupCountBased;
 use Laras\Router\RouteCollector;
 use Laras\Router\RouterServiceProvider as BaseRouterServiceProvider;
+use Laras\Server\TcpServer;
 use Laras\Server\WebsocketServer;
 
 class RouterServiceProvider extends BaseRouterServiceProvider
@@ -18,6 +19,9 @@ class RouterServiceProvider extends BaseRouterServiceProvider
 
     public function boot()
     {
+        if ($this->app->getServer() instanceof TcpServer) {
+            return;
+        }
         $this->collector = $this->app->make(RouteCollector::class);
         $this->loadApiRoutes();
         $this->loadWebRoutes();

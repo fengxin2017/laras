@@ -312,13 +312,13 @@ class Portal extends Command
     {
         $this->style->writeln("<comment>>>>Logo</comment>");
         static $logo = <<<BTC
- _                      __ 
-| |                   /  __|
-| |    __ _ _ __ __ _|  (__  
+ _                      __    
+| |                   /  __|  
+| |    __ _ _ __ __ _|  (__   
 | |   / _` | '__/ _` |\___  \ 
 | |__| (_| | | | (_| |____)  |
 |_____\__,_|_|  \__,_|_____ / 
-                                           
+                                       
 BTC;
         $colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan'];
 

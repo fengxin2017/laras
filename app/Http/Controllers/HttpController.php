@@ -38,6 +38,7 @@ class HttpController extends Controller
 
     public function index()
     {
+        return 'this is index page';
         //$user = User::query()->first();
         //return $user;
 //        $user = DB::table('users')->first();

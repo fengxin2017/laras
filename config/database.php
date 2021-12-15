@@ -15,7 +15,7 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'port' => '3306',
-            'host' => '192.168.10.10',
+            'host' => 'localhost',
             'database' => 'practice',
             'username' => 'homestead',
             'password' => 'secret',
