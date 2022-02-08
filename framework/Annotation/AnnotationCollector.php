@@ -81,6 +81,16 @@ class AnnotationCollector
     }
 
     /**
+     * @param array $annotations
+     * @return $this
+     */
+    public function setAnnotations(array $annotations)
+    {
+        $this->annotations = $annotations;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getAnnotations()

@@ -4,3 +4,4 @@ vendor/
 Temp/
 storage/logs/
 .env
+runtime/

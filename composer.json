@@ -10,11 +10,12 @@
     ],
     "license": "MIT",
     "require": {
-        "ext-inotify": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "ext-redis": "*",
+        "composer/pcre": "^1.0",
+        "composer/semver": "^3.2",
         "doctrine/annotations": "1.11.1",
         "fig/http-message-util": "^1.1",
         "illuminate/config": "^8.0",

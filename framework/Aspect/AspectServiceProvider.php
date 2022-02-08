@@ -4,16 +4,10 @@
 namespace Laras\Aspect;
 
 
-use Composer\Autoload\ClassLoader as ComposerClassLoader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
 use Laras\Annotation\AnnotationCollector;
 use Laras\Aspect\Annotation\Aspect;
-use Laras\Aspect\Aop\AstVisitorRegistry;
-use Laras\Aspect\Aop\ProxyCallVisitor;
-use Laras\Aspect\Aop\ProxyManager;
-use Laras\Composer\ClassLoader;
 use ReflectionException;
 
 class AspectServiceProvider extends ServiceProvider
@@ -67,9 +61,8 @@ class AspectServiceProvider extends ServiceProvider
      */
     protected function loadAnnotationAspects()
     {
-        $aspects     = [];
-        $annotations = $this->app->make(AnnotationCollector::class)
-                                 ->getAnnotations()['c'];
+        $aspects = [];
+        $annotations = $this->app->get(AnnotationCollector::class)->getAnnotations()['c'];
 
         foreach ($annotations as $class => $annotationItems) {
             if (count($annotationItems) > 0) {

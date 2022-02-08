@@ -39,7 +39,7 @@ class CrontabServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $annotationClasses = $this->app->make(AnnotationCollector::class)->getAnnotations()['c'];
+        $annotationClasses = $this->app->get(AnnotationCollector::class)->getAnnotations()['c'];
 
         if ($this->app->getWorkerId() == 0) {
             $crontabManager = $this->app->make(CrontabManager::class);

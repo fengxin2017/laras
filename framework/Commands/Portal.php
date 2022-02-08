@@ -4,6 +4,7 @@ namespace Laras\Commands;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Laras\Composer\ClassLoader;
 use Laras\Foundation\Application;
 use Laras\Server\HttpServer;
 use Laras\Server\TcpServer;
@@ -137,6 +138,7 @@ class Portal extends Command
                             $this->reloading = true;
                             $hash = $this->watch($this->watchConfig['hash']['watch_path']);
                             if ($hash != $this->hash) {
+                                ClassLoader::$instance->reProxy();
                                 $ret = Process::kill($this->pid, SIGUSR1);
                                 $this->hash = $hash;
                                 if ($ret) {
@@ -226,6 +228,7 @@ class Portal extends Command
             $inotify = new Inotify(
                 $this->watchConfig['watch_path'], IN_CREATE | IN_DELETE | IN_MODIFY | IN_MOVE,
                 function ($event) {
+                    ClassLoader::$instance->reProxy();
                     Process::kill($this->pid, SIGUSR1);
                 }
             );

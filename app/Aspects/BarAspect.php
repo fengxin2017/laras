@@ -39,8 +39,9 @@ class BarAspect extends AbstractAspect
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
-        var_dump('before index');
-
-        return $proceedingJoinPoint->process();
+        var_dump('haha i am aspect before');
+        $result =  $proceedingJoinPoint->process();
+        var_dump('lol i am aspect after');
+        return $result;
     }
 }

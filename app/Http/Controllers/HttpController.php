@@ -39,8 +39,7 @@ class HttpController extends Controller
 
     public function index()
     {
-        var_dump('8484844484855555');
-        return 'this is index page';
+        return 'this is index 486486484ueueue888484884';
         //$user = User::query()->first();
         //return $user;
 //        $user = DB::table('users')->first();

@@ -17,11 +17,6 @@ class AspectCollector
      */
     protected static $aspectRules = [];
 
-    /**
-     * @var SplPriorityQueue[]
-     */
-    protected static $aspectQueues = [];
-
     public static function setAround(string $aspect, array $classes, array $annotations, ?int $priority = null): void
     {
         if (! is_int($priority)) {
