@@ -14,6 +14,7 @@ use Laras\Database\DatabaseServiceProvider;
 use Laras\Redis\RedisServiceProvider;
 use App\Providers\RouterServiceProvider;
 use Laras\Support\RateLimitorServiceProvider;
+use Laras\Aspect\AspectServiceProvider;
 
 return [
     /*
@@ -118,6 +119,7 @@ return [
          * Laras framework Service Providers...
          */
         AnnotationServiceProvider::class,
+        AspectServiceProvider::class,
         LogServiceProvider::class,
         DatabaseServiceProvider::class,
         RedisServiceProvider::class,

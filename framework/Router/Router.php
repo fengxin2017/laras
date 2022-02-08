@@ -3,6 +3,7 @@
 namespace Laras\Router;
 
 use App\Annotations\Middleware;
+use App\Http\Controllers\HttpController;
 use Exception;
 use FastRoute\Dispatcher;
 use FastRoute\Dispatcher\GroupCountBased;

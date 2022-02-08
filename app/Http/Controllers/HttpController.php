@@ -15,6 +15,7 @@ use App\Test\Foo;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Connectors\Connector;
 use Illuminate\Validation\ValidationException;
 use Laras\Facades\DB;
 use Laras\Facades\Mail;
@@ -38,6 +39,7 @@ class HttpController extends Controller
 
     public function index()
     {
+        var_dump('8484844484855555');
         return 'this is index page';
         //$user = User::query()->first();
         //return $user;

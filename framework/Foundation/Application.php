@@ -86,7 +86,7 @@ class Application extends Container implements ApplicationContract
      */
     public function __construct(Pool $pool, Process $worker, string $server)
     {
-        $this->pool = $pool;
+        $this->pool   = $pool;
         $this->worker = $worker;
         $this->registerContext();
         $this->setBasePath(ROOT_PATH);
@@ -305,14 +305,15 @@ class Application extends Container implements ApplicationContract
     public function bootstrap()
     {
         foreach ($this->bootstrappers as $bootstrapper) {
-            $this->make($bootstrapper)->bootstrap($this);
+            $this->make($bootstrapper)
+                 ->bootstrap($this);
         }
     }
 
     public function registerBaseServiceProviders()
     {
         $configServiceProvider = new ConfigServiceProvider($this);
-        $eventServiceProvider = new EventServiceProvider($this);
+        $eventServiceProvider  = new EventServiceProvider($this);
         foreach ([$configServiceProvider, $eventServiceProvider] as $baseServiceProvider) {
             if (method_exists($baseServiceProvider, 'register')) {
                 $baseServiceProvider->register();
