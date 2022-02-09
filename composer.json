@@ -10,6 +10,7 @@
     ],
     "license": "MIT",
     "require": {
+        "ext-pcntl": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pdo": "*",

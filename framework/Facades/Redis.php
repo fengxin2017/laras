@@ -25,6 +25,7 @@ use Redis as NativeRedis;
  * @method static sPop(string $key)
  * @method static sAddArray($key, array $values)
  *
+ * @mixin NativeRedis
  * @see RedisManager
  */
 class Redis extends Facade

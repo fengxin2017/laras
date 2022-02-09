@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use Laras\Tcp\Request;
 
-class TcpController extends Controller
+class TcpController extends BaseController
 {
     public function handle(Request $request)
     {

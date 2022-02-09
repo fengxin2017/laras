@@ -26,9 +26,6 @@ class Request
      */
     protected $header;
 
-    /**
-     * @var $files
-     */
     protected $files;
 
     /**

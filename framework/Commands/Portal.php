@@ -219,25 +219,25 @@ class Portal extends Command
             throw new Exception('Require extension inotify');
         }
 
-        $fileTypes = isset($this->watchConfig['file_types']) ? (array)$this->watchConfig['file_types'] : [];
+        $fileTypes = isset($this->watchConfig['inotify']['file_types']) ? (array)$this->watchConfig['inotify']['file_types'] : [];
         if (empty($fileTypes)) {
             throw new Exception('No file types to watch by inotify');
         }
 
         $callback = function () {
             $inotify = new Inotify(
-                $this->watchConfig['watch_path'], IN_CREATE | IN_DELETE | IN_MODIFY | IN_MOVE,
+                $this->watchConfig['inotify']['watch_path'], IN_CREATE | IN_DELETE | IN_MODIFY | IN_MOVE,
                 function ($event) {
                     ClassLoader::$instance->reProxy();
                     Process::kill($this->pid, SIGUSR1);
                 }
             );
-            $inotify->addFileTypes($this->watchConfig['file_types']);
-            if (empty($this->watchConfig['excluded_dirs'])) {
-                $this->watchConfig['excluded_dirs'] = [];
+            $inotify->addFileTypes($this->watchConfig['inotify']['file_types']);
+            if (empty($this->watchConfig['inotify']['excluded_dirs'])) {
+                $this->watchConfig['inotify']['excluded_dirs'] = [];
             }
 
-            $inotify->addExcludedDirs($this->watchConfig['excluded_dirs']);
+            $inotify->addExcludedDirs($this->watchConfig['inotify']['excluded_dirs']);
             $inotify->watch();
             $inotify->start();
         };

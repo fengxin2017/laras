@@ -8,9 +8,6 @@ use Swoole\Timer;
 
 class RateLimitorServiceProvider extends ServiceProvider
 {
-    /**
-     * @var $millisecond
-     */
     protected $milliseconds;
 
     /**

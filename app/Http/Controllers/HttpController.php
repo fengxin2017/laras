@@ -17,6 +17,7 @@ use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Connectors\Connector;
 use Illuminate\Validation\ValidationException;
+use Laras\Annotation\Controller;
 use Laras\Facades\DB;
 use Laras\Facades\Mail;
 use Laras\Facades\Redis;
@@ -29,24 +30,18 @@ use Laras\Http\Response;
  * Class TestController
  * @package App\Http\Controllers
  */
-class HttpController extends Controller
+class HttpController extends BaseController
 {
-    /**
-     * @Inject()
-     * @var Foo
-     */
-    public $foo;
-
-    public function index()
+    public function index(Request $request)
     {
-        return 'this is index 486486484ueueue888484884';
+        var_dump($request->get('foo'));
         //$user = User::query()->first();
         //return $user;
 //        $user = DB::table('users')->first();
         //return $user;
 //        return DB::table('users')->get();
 //        $user = User::query()->first();
-        return 'index';
+        return '333333555555556669999';
     }
 
     /**
@@ -104,7 +99,7 @@ class HttpController extends Controller
      */
     public function middleware(Response $response)
     {
-        return 'done';
+        return 'done11';
     }
 
     /**

@@ -13,9 +13,7 @@ class Request
      */
     protected $connection;
 
-    /**
-     * @var # $requestData
-     */
+
     protected $requestData;
 
     /**

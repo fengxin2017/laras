@@ -12,120 +12,70 @@ use Roave\BetterReflection\Reflection\ReflectionProperty as BetterReflectionProp
 class AnnotationCollector
 {
     protected static $container   = [];
-    protected        $annotations = [];
-    protected static $instance;
 
-    public function collectClass(ReflectionClass $class, array $annotations = [])
+    public static function collectClass(ReflectionClass $class, array $annotations = [])
     {
         $className = $class->getName();
 
-        if (isset($this->annotations['c'][$className])) {
-            $this->annotations['c'][$className] = array_merge($this->annotations['c'][$className], $annotations);
+        if (isset(self::$container[$className]['c'])) {
+            self::$container[$className]['c'] = array_merge(self::$container[$className]['c'], $annotations);
         } else {
-            $this->annotations['c'][$className] = $annotations;
+            self::$container[$className]['c'] = $annotations;
         }
     }
 
-    public function collectMethod(ReflectionMethod $method, array $annotations = [])
+    public static function collectMethod(ReflectionMethod $method, array $annotations = [])
     {
         $className  = $method->getDeclaringClass()
                              ->getName();
         $methodName = $method->getName();
-        if (isset($this->annotations['m'][$className][$methodName])) {
-            $this->annotations['m'][$className][$methodName] = array_merge(
-                $this->annotations['m'][$className][$methodName],
+
+        if (isset(self::$container[$className]['m'][$methodName])) {
+            self::$container[$className]['m'][$methodName] = array_merge(
+                self::$container[$className]['m'][$methodName],
                 $annotations
             );
         } else {
-            $this->annotations['m'][$className][$methodName] = $annotations;
+            self::$container[$className]['m'][$methodName] = $annotations;
         }
     }
 
-    public function collectProperty(ReflectionProperty $property, array $annotations = [])
+    public static function collectProperty(ReflectionProperty $property, array $annotations = [])
     {
         $className    = $property->getDeclaringClass()
                                  ->getName();
         $propertyName = $property->getName();
-        if (isset($this->annotations['p'][$className][$propertyName])) {
-            $this->annotations['p'][$className][$propertyName] = array_merge(
-                $this->annotations['p'][$className][$propertyName],
+
+        if (isset(self::$container[$className]['p'][$propertyName])) {
+            self::$container[$className]['p'][$propertyName] = array_merge(
+                self::$container[$className]['p'][$propertyName],
                 $annotations
             );
         } else {
-            $this->annotations['p'][$className][$propertyName] = $annotations;
+            self::$container[$className]['p'][$propertyName] = $annotations;
         }
     }
 
-    public function collectInjection(BetterReflectionProperty $property, $injection)
+    public static function collectInjection(BetterReflectionProperty $property, $injection)
     {
-        $className                                         = $property->getDeclaringClass()
-                                                                      ->getName();
-        $propertyName                                      = $property->getName();
-        $this->annotations['i'][$className][$propertyName] = $injection;
+        $className    = $property->getDeclaringClass()
+                                 ->getName();
+        $propertyName = $property->getName();
+
+        self::$container[$className]['i'][$propertyName] = $injection;
     }
 
     /**
-     * @param AnnotationCollector $instance
+     * @param array $containerData
      */
-    public static function setInstance(self $instance)
+    public static function setContainer(array $containerData)
     {
-        self::$instance = $instance;
-    }
-
-    /**
-     * @return self
-     */
-    public static function getInstance()
-    {
-        return self::$instance;
-    }
-
-    /**
-     * @param array $annotations
-     * @return $this
-     */
-    public function setAnnotations(array $annotations)
-    {
-        $this->annotations = $annotations;
-        return $this;
+        static::$container = $containerData;
     }
 
     /**
      * @return array
      */
-    public function getAnnotations()
-    {
-        return $this->annotations;
-    }
-
-    public function rebuild()
-    {
-        foreach ($this->annotations['c'] as $class => $annotations) {
-            if (!isset(self::$container[$class]['c'])) {
-                self::$container[$class]['c'] = $annotations;
-            } else {
-                self::$container[$class]['c'] = array_merge(self::$container[$class]['c'], $annotations);
-            }
-        }
-
-        foreach ($this->annotations['m'] as $class => $annotations) {
-            if (!isset(self::$container[$class]['m'])) {
-                self::$container[$class]['m'] = $annotations;
-            } else {
-                self::$container[$class]['m'] = array_merge(self::$container[$class]['m'], $annotations);
-            }
-        }
-
-        foreach ($this->annotations['p'] as $class => $annotations) {
-            if (!isset(self::$container[$class]['p'])) {
-                self::$container[$class]['p'] = $annotations;
-            } else {
-                self::$container[$class]['p'] = array_merge(self::$container[$class]['p'], $annotations);
-            }
-        }
-//        var_dump(self::$container);
-    }
-
     public static function getContainer()
     {
         return static::$container;

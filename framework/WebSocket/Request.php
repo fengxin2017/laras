@@ -12,9 +12,6 @@ class Request extends LarasRequest
      */
     protected $webSocketRequest;
 
-    /**
-     * @var $frame
-     */
     protected $frame;
 
     /**

@@ -3,7 +3,6 @@
 namespace Laras\Router;
 
 use App\Annotations\Middleware;
-use App\Http\Controllers\HttpController;
 use Exception;
 use FastRoute\Dispatcher;
 use FastRoute\Dispatcher\GroupCountBased;
@@ -47,25 +46,14 @@ class Router
      */
     protected $routeCollector;
 
-    /**
-     * @var $controllerPoolCreatedNum
-     */
     protected $controllerPoolCreatedNum;
 
-    /**
-     * @var $controllerMethodParams
-     */
     protected $controllerMethodParams;
 
-    /**
-     * cache middleware
-     *
-     * @var $minifestMiddleware
-     */
     protected $minifestMiddleware;
 
     /**
-     * @var bool
+     * @var bool $enableControllerPool
      */
     protected $enableControllerPool;
 
@@ -91,10 +79,10 @@ class Router
      */
     public function __construct(Application $app, RouteCollector $routeCollector)
     {
-        $this->app = $app;
-        $this->routeCollector = $routeCollector;
+        $this->app                  = $app;
+        $this->routeCollector       = $routeCollector;
         $this->enableControllerPool = $this->app['config']['controller']['enable_pool'] ?? false;
-        $this->maxPoolNum = $this->app['config']['controller.pool_number'];
+        $this->maxPoolNum           = $this->app['config']['controller.pool_number'];
     }
 
     /**
@@ -109,7 +97,8 @@ class Router
     {
         $httpMethod = $request->method();
 
-        $handler = $this->app->make(GroupCountBased::class)->dispatch($httpMethod, $request->uri());
+        $handler = $this->app->make(GroupCountBased::class)
+                             ->dispatch($httpMethod, $request->uri());
 
         if ($handler[0] != Dispatcher::FOUND) {
             return $handler[0];
@@ -122,19 +111,19 @@ class Router
         if ($this->enableControllerPool) {
             $this->createControllerPool($class);
         }
-        $controller = $this->getController($class, $method);
+        $controller             = $this->getController($class, $method);
         $controllerMethodParams = $this->getControllerMethodParams($class, $method, $inputs);
 
         try {
             if (!empty($middleware)) {
                 return $this->app->make(Pipeline::class)
-                    ->send($request, $response)
-                    ->through($middleware)
-                    ->then(
-                        function () use ($controller, $method, $controllerMethodParams) {
-                            return call_user_func([$controller, $method], ...$controllerMethodParams);
-                        }
-                    );
+                                 ->send($request, $response)
+                                 ->through($middleware)
+                                 ->then(
+                                     function () use ($controller, $method, $controllerMethodParams) {
+                                         return call_user_func([$controller, $method], ...$controllerMethodParams);
+                                     }
+                                 );
             }
             return call_user_func([$controller, $method], ...$controllerMethodParams);
         } catch (Throwable $throwable) {
@@ -152,7 +141,7 @@ class Router
     protected function createControllerPool(string $class)
     {
         if (!isset($this->controllerPool[$class])) {
-            $this->controllerPool[$class] = new Channel($this->maxPoolNum);
+            $this->controllerPool[$class]           = new Channel($this->maxPoolNum);
             $this->controllerPoolCreatedNum[$class] = 0;
         }
     }
@@ -167,7 +156,7 @@ class Router
     protected function getController(string $class, string $method)
     {
         if ($this->enableControllerPool) {
-            $channel = $this->controllerPool[$class];
+            $channel    = $this->controllerPool[$class];
             $createdNum = $this->controllerPoolCreatedNum[$class];
 
             if (!isset($this->controllerMethodParams[$class][$method])) {
@@ -189,8 +178,6 @@ class Router
      * @param string $class
      * @param string $method
      * @return array
-     * @throws BindingResolutionException
-     * @throws ReflectionException
      */
     protected function getMiddleware(string $httpMethod, string $class, string $method)
     {
@@ -205,10 +192,8 @@ class Router
                 $middleware = [];
             }
 
-            $methodAnnotations = $this->app->make(AnnotationCollector::class)->getAnnotations()['m'];
-
-            if (isset($methodAnnotations[$class][$method])) {
-                $annotations = $methodAnnotations[$class][$method];
+            if (isset(AnnotationCollector::getContainer()[$class]['m'][$method])) {
+                $annotations = AnnotationCollector::getContainer()[$class]['m'][$method];
                 foreach ($annotations as $annotation) {
                     if ($annotation instanceof Middleware) {
                         $middleware = array_merge($middleware, Arr::wrap($annotation->middlewares['value']));
@@ -271,7 +256,8 @@ class Router
      */
     public static function __callStatic(string $method, array $parameters)
     {
-        $collector = Application::getInstance()->make(RouteCollector::class);
+        $collector = Application::getInstance()
+                                ->make(RouteCollector::class);
         return call_user_func_array([$collector, $method], $parameters);
     }
 }

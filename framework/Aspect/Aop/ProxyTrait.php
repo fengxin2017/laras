@@ -91,13 +91,7 @@ trait ProxyTrait
 
     protected static function makePipeline(): Pipeline
     {
-        $container = Application::getInstance();
-        if (method_exists($container, 'make')) {
-            $pipeline = $container->make(Pipeline::class);
-        } else {
-            $pipeline = new Pipeline($container);
-        }
-        return $pipeline;
+        return Application::getInstance()->make(Pipeline::class);
     }
 
     protected static function getClassesAspects(string $className, string $method): array
@@ -120,9 +114,17 @@ trait ProxyTrait
     {
         $matchedAspect = $annotations = $rules = [];
 
-        $classAnnotations = AnnotationCollector::get($className . 'c', []);
-        $methodAnnotations = AnnotationCollector::get($className . 'm.' . $method, []);
-        $annotations = array_unique(array_merge(array_keys($classAnnotations), array_keys($methodAnnotations)));
+        $classAnnotations = AnnotationCollector::get($className . '.c', []);
+        $methodAnnotations = AnnotationCollector::get($className . '.m.' . $method, []);
+        $cAnnotations = [];
+        $mAnnotations = [];
+        foreach ($classAnnotations as $classAnnotation){
+            $cAnnotations[get_class($classAnnotation)] = $classAnnotation;
+        }
+        foreach ($methodAnnotations as $methodAnnotation){
+            $mAnnotations[get_class($methodAnnotation)] = $methodAnnotation;
+        }
+        $annotations = array_unique(array_merge(array_keys($cAnnotations), array_keys($mAnnotations)));
         if (! $annotations) {
             return $matchedAspect;
         }

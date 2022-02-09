@@ -11,25 +11,18 @@ use Exception;
 
 class Pipeline implements PipelineContract
 {
-    /**
-     * @var $request
-     */
+
     protected $request;
 
-    /**
-     * @var $response
-     */
     protected $response;
 
     /**
-     * 中间件
-     * @var array
+     * @var array $pipes
      */
     protected $pipes = [];
 
     /**
-     * 处理方法名
-     * @var string
+     * @var string $method
      */
     protected $method = 'handle';
 

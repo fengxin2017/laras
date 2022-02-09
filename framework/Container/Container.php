@@ -153,17 +153,15 @@ class Container extends IlluminateContainer implements LarasContainerContract
      */
     protected function inject($concrete)
     {
-        $annotationCollector = $this->instances[AnnotationCollector::class] ?? null;
-
-        if (!$annotationCollector || !$class = get_class($concrete)) {
+        if (!$class = get_class($concrete)) {
             return $concrete;
         }
 
         $injectProperties = [];
 
         // 传参方式注入
-        if (isset($annotationCollector->getAnnotations()['p'][$class])) {
-            $propertyInjects = $annotationCollector->getAnnotations()['p'][$class];
+        if (isset(AnnotationCollector::getContainer()[$class]['p'])) {
+            $propertyInjects = AnnotationCollector::getContainer()[$class]['p'];
 
             if (empty($propertyInjects)) {
                 return $concrete;
@@ -179,7 +177,7 @@ class Container extends IlluminateContainer implements LarasContainerContract
                             $injectClass = is_array($inject->inject['value']) ?
                                 current($inject->inject['value']) :
                                 $inject->inject['value'];
-                            $property = $reflectObject->getProperty($propertyKey);
+                            $property    = $reflectObject->getProperty($propertyKey);
                             $property->setAccessible(true);
                             $property->setValue($concrete, $this->coMake($injectClass));
                             $injected = true;
@@ -196,8 +194,8 @@ class Container extends IlluminateContainer implements LarasContainerContract
 
 
         // 不传参方式注入，通过 var 方式指定注入对象方式
-        if (isset($annotationCollector->getAnnotations()['i'][$class])) {
-            $injectClasses = $annotationCollector->getAnnotations()['i'][$class];
+        if (isset(AnnotationCollector::getContainer()[$class]['i'])) {
+            $injectClasses = AnnotationCollector::getContainer()[$class]['i'];
 
             if (empty($injectClasses)) {
                 return $concrete;
@@ -205,9 +203,10 @@ class Container extends IlluminateContainer implements LarasContainerContract
 
             $reflectObject = new ReflectionObject($concrete);
             foreach ($injectClasses as $propertyKey => $injectClass) {
-                if (in_array($propertyKey, $injectProperties) && (class_exists($injectClass) || interface_exists(
-                            $injectClass
-                        ))) {
+                if (
+                    in_array($propertyKey, $injectProperties) &&
+                    (class_exists($injectClass) || interface_exists($injectClass))
+                ) {
                     $property = $reflectObject->getProperty($propertyKey);
                     $property->setAccessible(true);
                     $property->setValue($concrete, $this->coMake($injectClass));

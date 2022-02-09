@@ -2,6 +2,7 @@
 
 namespace Laras\Composer;
 
+use App\Http\Controllers\HttpController;
 use Composer\Autoload\ClassLoader as ComposerClassLoader;
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -55,11 +56,12 @@ class ClassLoader
     /**
      * ClassLoader constructor.
      * @param ComposerClassLoader $classLoader
-     * @param string|null $customerProxyFileDir
+     * @param string|null $classMapDir
      * @throws AnnotationException
      * @throws ReflectionException
+     * @throws Exception
      */
-    public function __construct(ComposerClassLoader $classLoader, string $customerProxyFileDir = null)
+    public function __construct(ComposerClassLoader $classLoader, string $classMapDir = null)
     {
         $this->setComposerClassLoader($classLoader);
 
@@ -68,24 +70,38 @@ class ClassLoader
 
         $this->addProxies($proxyFileDir);
 
-        if (is_null($customerProxyFileDir)) {
-            $customerProxyFileDir = ROOT_PATH . DIRECTORY_SEPARATOR . 'Proxy' . DIRECTORY_SEPARATOR;
+        $classMap = ROOT_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'class_map.php';
+
+        if (is_file($classMap)) {
+            $map = require "{$classMap}";
+            foreach ($map as $class => $path) {
+                $this->proxies[$class] = $path;
+            }
         }
 
-        if (!is_dir($customerProxyFileDir)) {
-            mkdir($customerProxyFileDir, 0777, true);
+        if (is_null($classMapDir)) {
+            $classMapDir = ROOT_PATH . DIRECTORY_SEPARATOR . 'class_map' . DIRECTORY_SEPARATOR;
         }
+
+        if (!is_dir($classMapDir)) {
+            mkdir($classMapDir, 0755, true);
+        }
+
+        // overwrite
+        $this->addProxies($classMapDir);
 
         $runtimeProxyDir = ROOT_PATH . '/runtime/container/proxy/';
 
         if (!is_dir($runtimeProxyDir)) {
-            mkdir($runtimeProxyDir, 0777, true);
+            mkdir($runtimeProxyDir, 0755, true);
         }
 
-        // overwrite
-        $this->addProxies($customerProxyFileDir);
+        // 在子进程中注册访问器的话当热载的时候就无法获取到访问器需要在这里注册
+        if (!AstVisitorRegistry::exists(ProxyCallVisitor::class)) {
+            AstVisitorRegistry::insert(ProxyCallVisitor::class, PHP_INT_MAX / 2);
+        }
 
-        // 这个不开子进程，无法使用当前COMPOSER的loadClass方法，目前不知道原因
+        // 这个不开子进程，无法使用当前COMPOSER的loadClass方法 目前不知道原因
         $pid = pcntl_fork();
 
         if ($pid == -1) {
@@ -94,11 +110,8 @@ class ClassLoader
         if ($pid) {
             pcntl_wait($status);
             [$data, $proxies] = unserialize(file_get_contents($this->path));
-            $annotations = $data['annotations'];
-            $annotationCollector = new AnnotationCollector();
-            $annotationCollector->setAnnotations($annotations);
-            $annotationCollector->rebuild();
-            AnnotationCollector::setInstance($annotationCollector);
+            $annotationData = $data['annotationData'];
+            AnnotationCollector::setContainer($annotationData);
 
             $aspectData = $data['aspectData'];
             AspectCollector::deserialize($aspectData);
@@ -107,17 +120,18 @@ class ClassLoader
                 $this->proxies[$class] = $path;
             }
         } else {
-            $annotations = self::loadAnnotations();
-            $aspectData = self::loadAspects();
-            $proxyManager = new ProxyManager(
+            $annotationData = self::loadAnnotations();
+            $aspectData     = self::loadAspects();
+
+            $proxyManager   = new ProxyManager(
                 $this->getComposerClassLoader()
-                    ->getClassMap(), $runtimeProxyDir
+                     ->getClassMap(), $runtimeProxyDir
             );
-            $proxies = $proxyManager->getProxies();
+            $proxies        = $proxyManager->getProxies();
 
             $data = [
-                'annotations' => $annotations,
-                'aspectData' => $aspectData,
+                'annotationData' => $annotationData,
+                'aspectData'     => $aspectData,
             ];
             $this->putCache($this->path, serialize([$data, $proxies]));
             exit();
@@ -128,7 +142,7 @@ class ClassLoader
     {
         new ProxyManager(
             $this->getComposerClassLoader()
-                ->getClassMap(), ROOT_PATH . '/runtime/container/proxy/'
+                 ->getClassMap(), ROOT_PATH . '/runtime/container/proxy/'
         );
     }
 
@@ -148,13 +162,13 @@ class ClassLoader
     protected function addProxies(string $dir): void
     {
         $files = $this->finder->files()
-            ->name('*.php')
-            ->in($dir);
+                              ->name('*.php')
+                              ->in($dir);
         foreach ($files as $splFileInfo) {
             /**@var SplFileInfo $splFileInfo */
-            $file = $splFileInfo->getPathname();
+            $fileName = $splFileInfo->getPathname();
 
-            $fd = fopen($file, 'r');
+            $fd   = fopen($fileName, 'r');
             $line = '';
             $find = false;
             while (!feof($fd)) {
@@ -165,10 +179,10 @@ class ClassLoader
                 }
             }
             if ($find) {
-                $namespace = trim(
+                $namespace                                                            = trim(
                     str_replace(['namespace', ';'], ['', ''], $line)
                 );
-                $this->proxies[$namespace . '\\' . $splFileInfo->getBasename('.php')] = $file;
+                $this->proxies[$namespace . '\\' . $splFileInfo->getBasename('.php')] = $fileName;
             }
         };
     }
@@ -192,8 +206,8 @@ class ClassLoader
             if (is_array($loader) && $loader[0] instanceof ComposerClassLoader) {
                 /** @var ComposerClassLoader $composerClassLoader */
                 $composerClassLoader = $loader[0];
-                $classLoader = new static($composerClassLoader, $customerProxyFileDir);
-                static::$instance = $classLoader;
+                $classLoader         = new static($composerClassLoader, $customerProxyFileDir);
+                static::$instance    = $classLoader;
                 AnnotationRegistry::registerLoader(
                     function ($class) use ($classLoader) {
                         return (bool)$classLoader->locateFile($class);
@@ -234,7 +248,7 @@ class ClassLoader
             $file = $this->proxies[$className];
         } else {
             $file = $this->getComposerClassLoader()
-                ->findFile($className);
+                         ->findFile($className);
         }
 
         return is_string($file) ? $file : null;
@@ -246,8 +260,10 @@ class ClassLoader
     }
 
     /**
+     * @return array
      * @throws AnnotationException
      * @throws ReflectionException
+     * @throws Exception
      */
     public static function loadAnnotations()
     {
@@ -262,17 +278,13 @@ class ClassLoader
         }
 
         $files = Finder::create()
-            ->files()
-            ->name('*.php')
-            ->in($annotationFiles);
+                       ->files()
+                       ->name('*.php')
+                       ->in($annotationFiles);
 
-        /**
-         * @var AnnotationReader $annotationReader
-         */
         $annotationReader = new AnnotationReader();
 
-        $annotationCollector = new AnnotationCollector();
-
+        AnnotationReader::addGlobalIgnoredName('mixin');
         foreach ($files as $file) {
             /**@var SplFileInfo $file */
             $fd = fopen($file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename(), 'r');
@@ -295,7 +307,7 @@ class ClassLoader
 
             $reflectionClass = new \ReflectionClass($class);
 
-            $annotationCollector->collectClass(
+            AnnotationCollector::collectClass(
                 $reflectionClass,
                 $annotationReader->getClassAnnotations($reflectionClass)
             );
@@ -303,7 +315,7 @@ class ClassLoader
             $reflectionMethods = $reflectionClass->getMethods();
 
             foreach ($reflectionMethods as $method) {
-                $annotationCollector->collectMethod(
+                AnnotationCollector::collectMethod(
                     $method,
                     $annotationReader->getMethodAnnotations($method)
                 );
@@ -312,15 +324,15 @@ class ClassLoader
             $reflectionProperties = $reflectionClass->getProperties();
 
             foreach ($reflectionProperties as $property) {
-                $annotationCollector->collectProperty(
+                AnnotationCollector::collectProperty(
                     $property,
                     $annotationReader->getPropertyAnnotations($property)
                 );
             }
 
-            $betterPropertyTypeFinder = new FindPropertyType();
-            $betterReflectClass = (new BetterReflection())->classReflector()
-                ->reflect($class);
+            $betterPropertyTypeFinder   = new FindPropertyType();
+            $betterReflectClass         = (new BetterReflection())->classReflector()
+                                                                  ->reflect($class);
             $betterReflectionProperties = $betterReflectClass->getImmediateProperties();
 
             foreach ($betterReflectionProperties as $betterReflectionProperty) {
@@ -334,20 +346,20 @@ class ClassLoader
                     '\\'
                 );
                 if ($inject) {
-                    $annotationCollector->collectInjection($betterReflectionProperty, $inject);
+                    AnnotationCollector::collectInjection($betterReflectionProperty, $inject);
                 }
             }
         }
-        $annotationCollector->rebuild();
-        return $annotationCollector->getAnnotations();
+
+        return AnnotationCollector::getContainer();
     }
 
+    /**
+     * @return string
+     * @throws ReflectionException
+     */
     public static function loadAspects()
     {
-        if (!AstVisitorRegistry::exists(ProxyCallVisitor::class)) {
-            AstVisitorRegistry::insert(ProxyCallVisitor::class, PHP_INT_MAX / 2);
-        }
-
         $aspects = array_unique(array_merge(static::getConfigAspects(), static::loadAnnotationAspects()));
 
         foreach ($aspects as $aspect) {
@@ -369,7 +381,7 @@ class ClassLoader
     protected static function getConfigAspects()
     {
         $configAspect = ROOT_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'aspect.php';
-        $aspects = [];
+        $aspects      = [];
         if (is_file($configAspect)) {
             $aspects = require "{$configAspect}";
         }
@@ -382,7 +394,7 @@ class ClassLoader
      */
     protected static function loadAnnotationAspects()
     {
-        $aspects = [];
+        $aspects     = [];
         $annotations = AnnotationCollector::getContainer();
 
         foreach ($annotations as $class => $annotationItems) {

@@ -118,8 +118,6 @@ return [
         /*
          * Laras framework Service Providers...
          */
-        AnnotationServiceProvider::class,
-        AspectServiceProvider::class,
         LogServiceProvider::class,
         DatabaseServiceProvider::class,
         RedisServiceProvider::class,

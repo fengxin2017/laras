@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use Laras\WebSocket\Request;
 use Laras\WebSocket\Response;
 
-class WebSocketController extends Controller
+class WebSocketController extends BaseController
 {
     public function test(Response $response)
     {

@@ -19,7 +19,7 @@ class BarAspect extends AbstractAspect
      * @var array
      */
     public $classes = [
-        HttpController::class
+//        HttpController::class
     ];
 
     /**

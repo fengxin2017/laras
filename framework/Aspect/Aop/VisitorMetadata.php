@@ -7,27 +7,27 @@ use PhpParser\Node;
 class VisitorMetadata
 {
     /**
-     * @var string
+     * @var string $className
      */
     public $className;
 
     /**
-     * @var bool
+     * @var bool $hasConstructor
      */
     public $hasConstructor;
 
     /**
-     * @var null|Node\Stmt\ClassMethod
+     * @var null|Node\Stmt\ClassMethod $constructorNode
      */
     public $constructorNode;
 
     /**
-     * @var bool
+     * @var bool $hasExtends
      */
     public $hasExtends;
 
     /**
-     * @var null|string
+     * @var null|string $classLike
      */
     public $classLike;
 }

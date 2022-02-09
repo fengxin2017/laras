@@ -2,9 +2,11 @@
 
 namespace Laras\Aspect\Aop;
 
+use App\Http\Controllers\HttpController;
 use Laras\Annotation\AnnotationCollector;
 use Laras\Aspect\AspectCollector;
 use Illuminate\Filesystem\Filesystem;
+use const http\Client\Curl\Versions\ARES;
 
 class ProxyManager
 {
@@ -131,6 +133,7 @@ class ProxyManager
         if (! $reflectionClassMap) {
             return $proxies;
         }
+
         $classesAspects = AspectCollector::get('classes', []);
 
         foreach ($classesAspects as $aspect => $rules) {
@@ -143,15 +146,15 @@ class ProxyManager
                 }
             }
         }
-
         foreach ($reflectionClassMap as $className => $path) {
             // Aggregate the class annotations
-            $classAnnotations = $this->retrieveAnnotations($className . 'c');
+            $classAnnotations = $this->retrieveAnnotations($className . '.c');
             // Aggregate all methods annotations
-            $methodAnnotations = $this->retrieveAnnotations($className . 'm');
+            $methodAnnotations = $this->retrieveAnnotations($className . '.m');
             // Aggregate all properties annotations
-            $propertyAnnotations = $this->retrieveAnnotations($className . 'p');
+            $propertyAnnotations = $this->retrieveAnnotations($className . '.p');
             $annotations = array_unique(array_merge($classAnnotations, $methodAnnotations,$propertyAnnotations));
+
             if ($annotations) {
                 $annotationsAspects = AspectCollector::get('annotations', []);
                 foreach ($annotationsAspects as $aspect => $rules) {
@@ -176,11 +179,17 @@ class ProxyManager
 
         foreach ($annotations as $name => $annotation) {
             if (is_object($annotation)) {
-                $defined[] = $name;
+                $defined[] = get_class($annotation);
             } else {
-                $defined = array_merge($defined, array_keys($annotation));
+                $items = [];
+                $annotations = array_values($annotation);
+                foreach ($annotations as $anno){
+                    $items[] = get_class($anno);
+                }
+                $defined = array_merge($defined, $items);
             }
         }
+
         return $defined;
     }
 }

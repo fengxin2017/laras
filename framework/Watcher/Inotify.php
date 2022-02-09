@@ -11,13 +11,13 @@ class Inotify
     private $watchPath;
     private $watchMask;
     private $watchHandler;
-    private $doing        = false;
-    private $fileTypes    = [];
+    private $doing = false;
+    private $fileTypes = [];
     private $excludedDirs = [];
-    private $wdPath       = [];
-    private $pathWd       = [];
+    private $wdPath = [];
+    private $pathWd = [];
 
-    public function __construct($watchPath, $watchMask, callable $watchHandler)
+    public function __construct(array $watchPath, $watchMask, callable $watchHandler)
     {
         $this->fd = inotify_init();
         $this->watchPath = $watchPath;
@@ -63,7 +63,9 @@ class Inotify
 
     public function watch()
     {
-        $this->_watch($this->watchPath);
+        foreach ($this->watchPath as $path) {
+            $this->_watch($path);
+        }
     }
 
     protected function _watch($path)
@@ -131,7 +133,6 @@ class Inotify
                 }
 
                 $fileType = strchr($event['name'], '.');
-
                 if (!isset($this->fileTypes[$fileType])) {
                     continue;
                 }

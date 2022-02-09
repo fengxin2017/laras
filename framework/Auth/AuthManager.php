@@ -25,9 +25,6 @@ class AuthManager
      */
     protected $token;
 
-    /**
-     * @var  $userProvider
-     */
     protected $userProvider;
 
     /**
@@ -135,6 +132,5 @@ class AuthManager
 
     public function __destruct()
     {
-        //var_dump('我被销毁了');
     }
 }

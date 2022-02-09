@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use Illuminate\Validation\ValidationException;
 use Laras\Facades\ValidatorFactory;
 
-class Controller
+class BaseController
 {
     /**
      * Controller constructor.

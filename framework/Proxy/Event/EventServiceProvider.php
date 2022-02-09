@@ -11,7 +11,7 @@ use ReflectionException;
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * @var Application
+     * @var Application $app
      */
     protected $app;
 

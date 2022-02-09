@@ -76,9 +76,6 @@ class Response
      */
     public $status = 200;
 
-    /**
-     * @var
-     */
     protected $chunkLimit = 2097152; // 2 * 1024 * 1024
 
     /**

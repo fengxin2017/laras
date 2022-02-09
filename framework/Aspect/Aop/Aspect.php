@@ -14,7 +14,8 @@ class Aspect
     public static function parse(string $class): RewriteCollection
     {
         $rewriteCollection = new RewriteCollection($class);
-        $container         = AspectCollector::list();
+        $container = AspectCollector::list();
+
         foreach ($container as $type => $collection) {
             if ($type === 'classes') {
                 static::parseClasses($collection, $class, $rewriteCollection);
@@ -40,9 +41,9 @@ class Aspect
          * e.g. Foo/Bar::met*
          */
         $ruleMethod = null;
-        $ruleClass  = $rule;
-        $method     = null;
-        $class      = $target;
+        $ruleClass = $rule;
+        $method = null;
+        $class = $target;
 
         if (strpos($rule, '::') !== false) {
             [$ruleClass, $ruleMethod] = explode('::', $rule);
@@ -69,7 +70,7 @@ class Aspect
              * Match [rule] Foo*Bar::ruleMethod [target] Foo/Bar [return] true,ruleMethod
              * Match [rule] Foo*Bar [target] Foo/Bar [return] true,null.
              */
-            $preg    = str_replace(['*', '\\'], ['.*', '\\\\'], $ruleClass);
+            $preg = str_replace(['*', '\\'], ['.*', '\\\\'], $ruleClass);
             $pattern = "#^{$preg}$#";
 
             if (preg_match($pattern, $class)) {
@@ -96,7 +97,7 @@ class Aspect
          * Match [rule] FooBar::rule*Method [target] Foo/Bar::ruleMethod [return] true,rule*Method
          */
         if ($ruleMethod) {
-            $preg    = str_replace(['*', '\\'], ['.*', '\\\\'], $rule);
+            $preg = str_replace(['*', '\\'], ['.*', '\\\\'], $rule);
             $pattern = "#^{$preg}$#";
             if (preg_match($pattern, $target)) {
                 return [true, $method];
@@ -105,7 +106,7 @@ class Aspect
             /**
              * Match [rule] Foo*Bar [target] Foo/Bar::ruleMethod [return] true,null.
              */
-            $preg    = str_replace(['*', '\\'], ['.*', '\\\\'], $rule);
+            $preg = str_replace(['*', '\\'], ['.*', '\\\\'], $rule);
             $pattern = "#^{$preg}$#";
             if (preg_match($pattern, $class)) {
                 return [true, $method];
@@ -125,14 +126,23 @@ class Aspect
     private static function parseAnnotations(array $collection, string $class, RewriteCollection $rewriteCollection)
     {
         // Get the annotations of class and method.
-        $annotations   = AnnotationCollector::get($class);
-        $classMapping  = $annotations['c'] ?? [];
+        $annotations = AnnotationCollector::get($class);
+        $classMapping = $annotations['c'] ?? [];
+        $classMap = [];
+        foreach ($classMapping as $obj) {
+            $classMap[get_class($obj)] = $obj;
+        }
+
         $methodMapping = value(
             function () use ($annotations) {
-                $mapping           = [];
+                $mapping = [];
                 $methodAnnotations = $annotations['m'] ?? [];
                 foreach ($methodAnnotations as $method => $targetAnnotations) {
-                    $keys = array_keys($targetAnnotations);
+                    $keys = [];
+                    foreach ($targetAnnotations as $targetAnnotation) {
+                        $keys[] = get_class($targetAnnotation);
+                    }
+                    
                     foreach ($keys as $key) {
                         $mapping[$key][] = $method;
                     }
@@ -140,12 +150,14 @@ class Aspect
                 return $mapping;
             }
         );
-        $aspects       = array_keys($collection);
+
+
+        $aspects = array_keys($collection);
         foreach ($aspects ?? [] as $aspect) {
             $rules = AspectCollector::getRule($aspect);
             foreach ($rules['annotations'] ?? [] as $rule) {
                 // If exist class level annotation, then all methods should rewrite, so return an empty array directly.
-                if (isset($classMapping[$rule])) {
+                if (isset($classMap[$rule])) {
                     return $rewriteCollection->setLevel(RewriteCollection::CLASS_LEVEL);
                 }
                 if (isset($methodMapping[$rule])) {
@@ -153,6 +165,7 @@ class Aspect
                 }
             }
         }
+
         return $rewriteCollection;
     }
 

@@ -248,7 +248,6 @@ class ProxyCallVisitor extends NodeVisitorAbstract
         }
 
         $rewriteCollection = Aspect::parse($this->visitorMetadata->className);
-
         return $rewriteCollection->shouldRewrite($node->name->toString());
     }
 }
