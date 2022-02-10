@@ -6,6 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use Laras\Facades\Redis;
 use Swoole\Timer;
 
+/**
+ * @deprecated middleware insteaded
+ * Class RateLimitorServiceProvider
+ * @package Laras\Support
+ */
 class RateLimitorServiceProvider extends ServiceProvider
 {
     protected $milliseconds;

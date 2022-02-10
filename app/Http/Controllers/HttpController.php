@@ -4,24 +4,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\Jim;
+use App\Http\Middleware\RateLimitor;
 use App\Http\Middleware\Tool;
 use App\Jobs\FooJob;
-use App\Mails\TestMail;
 use App\Models\User;
-use App\Test\Foo;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Database\Connectors\Connector;
 use Illuminate\Validation\ValidationException;
 use Laras\Facades\DB;
-use Laras\Facades\Mail;
-use Laras\Facades\Redis;
 use Laras\Facades\Storage;
 use Laras\Facades\View;
 use Laras\Http\Request;
 use Laras\Http\Response;
-use Laras\Support\Annotation\Controller;
 use Laras\Support\Annotation\Middleware;
 
 /**
@@ -91,7 +86,7 @@ class HttpController extends BaseController
     }
 
     /**
-     * @Middleware({Jim::class,Tool::class})
+     * @Middleware({Jim::class:"1,3",Tool::class:"2,4"})
      * @param Response $response
      * @return mixed
      * @throws Exception
@@ -99,6 +94,15 @@ class HttpController extends BaseController
     public function middleware(Response $response)
     {
         return 'done11';
+    }
+
+    /**
+     * @Middleware({RateLimitor::class:"1,3"})
+     * @return string
+     */
+    public function ratelimit()
+    {
+        return 'test';
     }
 
     /**

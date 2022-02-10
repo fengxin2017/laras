@@ -10,3 +10,4 @@ Router::get('middleware', [HttpController::class, 'middleware']);
 Router::get('event',[HttpController::class,'event']);
 Router::get('job',[HttpController::class,'job']);
 Router::get('validates',[HttpController::class,'validates']);
+Router::get('ratelimit',[HttpController::class,'ratelimit']);

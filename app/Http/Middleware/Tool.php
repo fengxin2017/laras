@@ -14,9 +14,11 @@ class Tool
      * @param Closure $next
      * @return bool|mixed
      */
-    public function handle(Request $request, Response $response, Closure $next)
+    public function handle(Request $request, Response $response, Closure $next,$a,$b)
     {
         var_dump('tool');
+        var_dump($a);
+        var_dump($b);
         return $next($request, $response);
     }
 }

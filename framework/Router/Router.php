@@ -2,7 +2,6 @@
 
 namespace Laras\Router;
 
-use App\Annotations\Middleware;
 use Exception;
 use FastRoute\Dispatcher;
 use FastRoute\Dispatcher\GroupCountBased;
@@ -14,6 +13,7 @@ use Laras\Foundation\Application;
 use Laras\Http\Request;
 use Laras\Http\Response;
 use Laras\Pipe\Pipeline;
+use Laras\Support\Annotation\Middleware;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -79,10 +79,10 @@ class Router
      */
     public function __construct(Application $app, RouteCollector $routeCollector)
     {
-        $this->app                  = $app;
-        $this->routeCollector       = $routeCollector;
+        $this->app = $app;
+        $this->routeCollector = $routeCollector;
         $this->enableControllerPool = $this->app['config']['controller']['enable_pool'] ?? false;
-        $this->maxPoolNum           = $this->app['config']['controller.pool_number'];
+        $this->maxPoolNum = $this->app['config']['controller.pool_number'];
     }
 
     /**
@@ -98,7 +98,7 @@ class Router
         $httpMethod = $request->method();
 
         $handler = $this->app->make(GroupCountBased::class)
-                             ->dispatch($httpMethod, $request->uri());
+            ->dispatch($httpMethod, $request->uri());
 
         if ($handler[0] != Dispatcher::FOUND) {
             return $handler[0];
@@ -111,19 +111,19 @@ class Router
         if ($this->enableControllerPool) {
             $this->createControllerPool($class);
         }
-        $controller             = $this->getController($class, $method);
+        $controller = $this->getController($class, $method);
         $controllerMethodParams = $this->getControllerMethodParams($class, $method, $inputs);
 
         try {
             if (!empty($middleware)) {
                 return $this->app->make(Pipeline::class)
-                                 ->send($request, $response)
-                                 ->through($middleware)
-                                 ->then(
-                                     function () use ($controller, $method, $controllerMethodParams) {
-                                         return call_user_func([$controller, $method], ...$controllerMethodParams);
-                                     }
-                                 );
+                    ->send($request, $response)
+                    ->through($middleware)
+                    ->then(
+                        function () use ($controller, $method, $controllerMethodParams) {
+                            return call_user_func([$controller, $method], ...$controllerMethodParams);
+                        }
+                    );
             }
             return call_user_func([$controller, $method], ...$controllerMethodParams);
         } catch (Throwable $throwable) {
@@ -141,7 +141,7 @@ class Router
     protected function createControllerPool(string $class)
     {
         if (!isset($this->controllerPool[$class])) {
-            $this->controllerPool[$class]           = new Channel($this->maxPoolNum);
+            $this->controllerPool[$class] = new Channel($this->maxPoolNum);
             $this->controllerPoolCreatedNum[$class] = 0;
         }
     }
@@ -156,7 +156,7 @@ class Router
     protected function getController(string $class, string $method)
     {
         if ($this->enableControllerPool) {
-            $channel    = $this->controllerPool[$class];
+            $channel = $this->controllerPool[$class];
             $createdNum = $this->controllerPoolCreatedNum[$class];
 
             if (!isset($this->controllerMethodParams[$class][$method])) {
@@ -196,7 +196,16 @@ class Router
                 $annotations = AnnotationCollector::getContainer()[$class]['m'][$method];
                 foreach ($annotations as $annotation) {
                     if ($annotation instanceof Middleware) {
-                        $middleware = array_merge($middleware, Arr::wrap($annotation->middlewares['value']));
+                        $annotationMiddlewares = [];
+                        foreach (Arr::wrap($annotation->middlewares['value']) as $key => $annotationMiddleware) {
+                            if (is_numeric($key)) {
+                                $annotationMiddlewares[] = $annotationMiddleware;
+                            } else {
+                                $annotationMiddlewares[] = $key . ':' . $annotationMiddleware;
+                            }
+                        }
+
+                        $middleware = array_merge($middleware, $annotationMiddlewares);
                     }
                 }
             }
@@ -257,7 +266,7 @@ class Router
     public static function __callStatic(string $method, array $parameters)
     {
         $collector = Application::getInstance()
-                                ->make(RouteCollector::class);
+            ->make(RouteCollector::class);
         return call_user_func_array([$collector, $method], $parameters);
     }
 }

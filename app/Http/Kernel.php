@@ -12,7 +12,6 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        TrimStrings::class,
-        RateLimitor::class
+        TrimStrings::class
     ];
 }
