@@ -3,9 +3,6 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Annotations\Inject;
-use App\Annotations\Middleware;
 use App\Http\Middleware\Jim;
 use App\Http\Middleware\Tool;
 use App\Jobs\FooJob;
@@ -17,7 +14,6 @@ use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Connectors\Connector;
 use Illuminate\Validation\ValidationException;
-use Laras\Annotation\Controller;
 use Laras\Facades\DB;
 use Laras\Facades\Mail;
 use Laras\Facades\Redis;
@@ -25,6 +21,8 @@ use Laras\Facades\Storage;
 use Laras\Facades\View;
 use Laras\Http\Request;
 use Laras\Http\Response;
+use Laras\Support\Annotation\Controller;
+use Laras\Support\Annotation\Middleware;
 
 /**
  * Class TestController
@@ -34,7 +32,8 @@ class HttpController extends BaseController
 {
     public function index(Request $request)
     {
-        var_dump($request->get('foo'));
+        var_dump($this->foo);
+//        var_dump($request->get('foo'));
         //$user = User::query()->first();
         //return $user;
 //        $user = DB::table('users')->first();

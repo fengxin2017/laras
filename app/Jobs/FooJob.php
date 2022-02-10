@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Annotations\Inject;
 use App\Test\Bar;
 use Laras\Foundation\Bus\Job;
+use Laras\Support\Annotation\Inject;
 
 class FooJob extends Job
 {

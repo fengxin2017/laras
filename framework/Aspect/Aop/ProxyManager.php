@@ -2,11 +2,9 @@
 
 namespace Laras\Aspect\Aop;
 
-use App\Http\Controllers\HttpController;
+use Illuminate\Filesystem\Filesystem;
 use Laras\Annotation\AnnotationCollector;
 use Laras\Aspect\AspectCollector;
-use Illuminate\Filesystem\Filesystem;
-use const http\Client\Curl\Versions\ARES;
 
 class ProxyManager
 {
@@ -39,7 +37,8 @@ class ProxyManager
     public function __construct(
         array $classMap = [],
         string $proxyDir = ''
-    ) {
+    )
+    {
         $this->classMap = $classMap;
         $this->proxyDir = $proxyDir;
         $this->filesystem = new Filesystem();
@@ -61,10 +60,10 @@ class ProxyManager
     protected function generateProxyFiles(array $proxies = []): array
     {
         $proxyFiles = [];
-        if (! $proxies) {
+        if (!$proxies) {
             return $proxyFiles;
         }
-        if (! file_exists($this->getProxyDir())) {
+        if (!file_exists($this->getProxyDir())) {
             mkdir($this->getProxyDir(), 0755, true);
         }
         // WARNING: Ast class SHOULD NOT use static instance, because it will read  the code from file, then would be caused coroutine switch.
@@ -130,7 +129,7 @@ class ProxyManager
     {
         // According to the data of AspectCollector to parse all the classes that need proxy.
         $proxies = [];
-        if (! $reflectionClassMap) {
+        if (!$reflectionClassMap) {
             return $proxies;
         }
 
@@ -139,7 +138,7 @@ class ProxyManager
         foreach ($classesAspects as $aspect => $rules) {
             foreach ($rules as $rule) {
                 foreach ($reflectionClassMap as $class => $path) {
-                    if (! $this->isMatch($rule, $class)) {
+                    if (!$this->isMatch($rule, $class)) {
                         continue;
                     }
                     $proxies[$class][] = $aspect;
@@ -153,7 +152,7 @@ class ProxyManager
             $methodAnnotations = $this->retrieveAnnotations($className . '.m');
             // Aggregate all properties annotations
             $propertyAnnotations = $this->retrieveAnnotations($className . '.p');
-            $annotations = array_unique(array_merge($classAnnotations, $methodAnnotations,$propertyAnnotations));
+            $annotations = array_unique(array_merge($classAnnotations, $methodAnnotations, $propertyAnnotations));
 
             if ($annotations) {
                 $annotationsAspects = AspectCollector::get('annotations', []);
@@ -183,7 +182,7 @@ class ProxyManager
             } else {
                 $items = [];
                 $annotations = array_values($annotation);
-                foreach ($annotations as $anno){
+                foreach ($annotations as $anno) {
                     $items[] = get_class($anno);
                 }
                 $defined = array_merge($defined, $items);

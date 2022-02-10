@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\RouterServiceProvider;
 use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Hashing\HashServiceProvider;
 use Illuminate\Log\LogServiceProvider;
@@ -8,13 +9,12 @@ use Illuminate\Translation\TranslationServiceProvider;
 use Illuminate\Validation\ValidationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
 use Laras\Annotation\AnnotationServiceProvider;
+use Laras\Aspect\AspectServiceProvider;
 use Laras\Auth\AuthServiceProvider;
 use Laras\Crontab\CrontabServiceProvider;
 use Laras\Database\DatabaseServiceProvider;
 use Laras\Redis\RedisServiceProvider;
-use App\Providers\RouterServiceProvider;
 use Laras\Support\RateLimitorServiceProvider;
-use Laras\Aspect\AspectServiceProvider;
 
 return [
     /*
@@ -162,4 +162,14 @@ return [
         'Mail' => \Laras\Facades\Mail::class,
         'Hash' => \Laras\Facades\Hash::class
     ],
+
+    'annotation' => [
+        'scan' => [
+            ROOT_PATH . DIRECTORY_SEPARATOR . 'app',
+        ],
+        'classes' => [
+            \Laras\Support\Aspect\ControllerAspect::class,
+            \Laras\Support\Aspect\InjectAspect::class
+        ],
+    ]
 ];

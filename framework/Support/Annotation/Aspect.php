@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Laras\Aspect\Annotation;
+namespace Laras\Support\Annotation;
 
 use Doctrine\Common\Annotations\Annotation\Target;
 

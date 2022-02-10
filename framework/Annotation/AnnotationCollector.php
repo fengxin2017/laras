@@ -11,7 +11,7 @@ use Roave\BetterReflection\Reflection\ReflectionProperty as BetterReflectionProp
 
 class AnnotationCollector
 {
-    protected static $container   = [];
+    protected static $container = [];
 
     public static function collectClass(ReflectionClass $class, array $annotations = [])
     {
@@ -26,8 +26,8 @@ class AnnotationCollector
 
     public static function collectMethod(ReflectionMethod $method, array $annotations = [])
     {
-        $className  = $method->getDeclaringClass()
-                             ->getName();
+        $className = $method->getDeclaringClass()
+            ->getName();
         $methodName = $method->getName();
 
         if (isset(self::$container[$className]['m'][$methodName])) {
@@ -42,8 +42,8 @@ class AnnotationCollector
 
     public static function collectProperty(ReflectionProperty $property, array $annotations = [])
     {
-        $className    = $property->getDeclaringClass()
-                                 ->getName();
+        $className = $property->getDeclaringClass()
+            ->getName();
         $propertyName = $property->getName();
 
         if (isset(self::$container[$className]['p'][$propertyName])) {
@@ -58,8 +58,8 @@ class AnnotationCollector
 
     public static function collectInjection(BetterReflectionProperty $property, $injection)
     {
-        $className    = $property->getDeclaringClass()
-                                 ->getName();
+        $className = $property->getDeclaringClass()
+            ->getName();
         $propertyName = $property->getName();
 
         self::$container[$className]['i'][$propertyName] = $injection;
@@ -113,5 +113,10 @@ class AnnotationCollector
     public static function list(): array
     {
         return static::$container;
+    }
+
+    public static function clear()
+    {
+        static::$container = [];
     }
 }

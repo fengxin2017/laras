@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Annotations;
+namespace Laras\Support\Annotation;
 
 use Doctrine\Common\Annotations\Annotation\Target;
 
@@ -9,7 +9,6 @@ use Doctrine\Common\Annotations\Annotation\Target;
  * Class Crontab
  * @Annotation
  * @Target({"CLASS"})
- * @package App\Annotations
  */
 class Crontab
 {

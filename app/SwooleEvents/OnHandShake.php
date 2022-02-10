@@ -4,8 +4,8 @@
 namespace App\SwooleEvents;
 
 
-use App\Annotations\Inject;
 use Laras\Contracts\Foundation\Application;
+use Laras\Support\Annotation\Inject;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 

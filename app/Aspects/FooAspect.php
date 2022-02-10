@@ -3,10 +3,11 @@
 
 namespace App\Aspects;
 
-use App\Annotations\Middleware;
-use Laras\Aspect\Annotation\Aspect;
 use Laras\Aspect\Aop\AbstractAspect;
 use Laras\Aspect\Aop\ProceedingJoinPoint;
+use Laras\Support\Annotation\Aspect;
+use Laras\Support\Annotation\Middleware;
+use Exception;
 
 /**
  * @Aspect()
@@ -27,6 +28,11 @@ class FooAspect extends AbstractAspect
         Middleware::class
     ];
 
+    /**
+     * @param ProceedingJoinPoint $proceedingJoinPoint
+     * @return mixed
+     * @throws Exception
+     */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
         var_dump('i got u');

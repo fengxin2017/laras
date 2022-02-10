@@ -4,9 +4,10 @@
 namespace App\Aspects;
 
 use App\Http\Controllers\HttpController;
-use Laras\Aspect\Annotation\Aspect;
 use Laras\Aspect\Aop\AbstractAspect;
 use Laras\Aspect\Aop\ProceedingJoinPoint;
+use Laras\Support\Annotation\Aspect;
+use Exception;
 
 /**
  * Class BarAspect
@@ -35,7 +36,7 @@ class BarAspect extends AbstractAspect
     /**
      * @param ProceedingJoinPoint $proceedingJoinPoint
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {

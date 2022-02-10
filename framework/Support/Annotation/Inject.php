@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Annotations;
+namespace Laras\Support\Annotation;
 
 use Doctrine\Common\Annotations\Annotation\Target;
 
@@ -9,10 +9,14 @@ use Doctrine\Common\Annotations\Annotation\Target;
  * Class Inject
  * @Annotation
  * @Target({"PROPERTY"})
- * @package App\Inject
  */
 class Inject
 {
+    /**
+     * @var bool
+     */
+    public $required = true;
+
 
     public $inject = null;
 

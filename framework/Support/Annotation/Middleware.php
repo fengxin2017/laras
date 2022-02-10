@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Annotations;
+namespace Laras\Support\Annotation;
 
 use Doctrine\Common\Annotations\Annotation\Target;
 
@@ -8,7 +8,6 @@ use Doctrine\Common\Annotations\Annotation\Target;
  * Class Middleware
  * @Annotation
  * @Target({"METHOD"})
- * @package App\Annotations
  *
  */
 class Middleware

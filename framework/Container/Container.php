@@ -2,7 +2,7 @@
 
 namespace Laras\Container;
 
-use App\Annotations\Inject;
+use Laras\Support\Annotation\Inject;
 use Closure;
 use Exception;
 use Illuminate\Container\Container as IlluminateContainer;
@@ -118,9 +118,11 @@ class Container extends IlluminateContainer implements LarasContainerContract
                 );
             }
 
-            if (is_object($concrete)) {
-                return $this->inject($concrete);
-            }
+            // if class exist property should injected we will handle it use propertyHandlerTrait
+
+            //if (is_object($concrete)) {
+            //    return $this->inject($concrete);
+            //}
 
             return $concrete;
         }
@@ -132,20 +134,18 @@ class Container extends IlluminateContainer implements LarasContainerContract
      * @param callable|string $abstract
      * @param array $parameters
      * @return mixed
-     * @throws ReflectionException
      * @throws BindingResolutionException
      */
     public function make($abstract, array $parameters = [])
     {
         $concrete = $this->resolve($abstract, $parameters);
-        if (is_object($concrete)) {
-            return $this->inject($concrete);
-        }
+        // if class exist property should injected we will handle it use propertyHandlerTrait
 
         return $concrete;
     }
 
     /**
+     * @deprecated
      * @param $concrete
      * @return mixed
      * @throws ReflectionException

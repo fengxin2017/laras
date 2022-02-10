@@ -4,17 +4,27 @@
 namespace App\Http\Controllers;
 
 
+use App\Test\Foo;
 use Illuminate\Validation\ValidationException;
 use Laras\Facades\ValidatorFactory;
+use Laras\Support\Annotation\Inject;
 
+/**
+ * Class BaseController
+ * @package App\Http\Controllers
+ */
 class BaseController
 {
+    /**
+     * @Inject(Foo::class)
+     */
+    public $foo;
+
     /**
      * Controller constructor.
      */
     public function __construct()
     {
-
     }
 
     /**

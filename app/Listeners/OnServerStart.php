@@ -3,11 +3,10 @@
 
 namespace App\Listeners;
 
-
-use App\Annotations\Inject;
 use App\Test\Bar;
 use Laras\Contracts\Foundation\Application;
 use Laras\Server\HttpServer;
+use Laras\Support\Annotation\Inject;
 use Swoole\Process;
 
 class OnServerStart
