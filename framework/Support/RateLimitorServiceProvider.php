@@ -28,25 +28,31 @@ class RateLimitorServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->milliseconds = $this->app['config']['ratelimitor.milliseconds'];
-        $this->count = (int)$this->app['config']['ratelimitor.count'];
-        $this->capacity = (int)(1000 / $this->milliseconds) * $this->count;
-        $this->key = 'laras:capacity';
+        $this->milliseconds = (int)$this->app['config']['ratelimitor.milliseconds'];
+        $this->capacity = (int)$this->app['config']['ratelimitor.capacity'];
+        $this->key = $this->app['config']['ratelimitor.key'] . ':' . $this->app->getWorkerId();
     }
 
     public function boot()
     {
         Redis::del($this->key);
 
+        $this->put();
+
         Timer::tick(
             $this->milliseconds,
             function (int $timerId) {
-                $times = $this->count;
-                while ($times > 0 && Redis::sCard($this->key) < $this->capacity) {
-                    Redis::sAdd($this->key, microtime(true) . $times);
-                    $times--;
-                }
+                $this->put();
             }
         );
+    }
+
+    protected function put()
+    {
+        $times = $this->capacity;
+        while ($times > 0 && Redis::sCard($this->key) < $this->capacity) {
+            Redis::sAdd($this->key, microtime(true) . $times);
+            $times--;
+        }
     }
 }

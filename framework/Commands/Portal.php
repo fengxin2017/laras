@@ -104,10 +104,12 @@ class Portal extends Command
         $this->style = new SymfonyStyle($this->input, $this->output);
 
         try {
-            if ($this->watchConfig['driver'] == 'inotify') {
-                $this->addInotifyProcess();
-            } else {
-                $this->addFileWatchProcess();
+            if($this->watchConfig['on'] === true){
+                if ($this->watchConfig['driver'] == 'inotify') {
+                    $this->addInotifyProcess();
+                } else {
+                    $this->addFileWatchProcess();
+                }
             }
 
             return $this->start();

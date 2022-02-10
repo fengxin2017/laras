@@ -397,7 +397,7 @@ class ClassLoader
             // Annotations
             $annotations = $instanceAnnotations ?: [];
 
-            AspectCollector::setAround($aspect, $classes, $annotations);
+            AspectCollector::setAround($aspect, $classes, $annotations,$instancePriority);
         }
 
         return AspectCollector::serialize();

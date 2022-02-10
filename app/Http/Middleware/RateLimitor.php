@@ -8,6 +8,7 @@ use Laras\Facades\Config;
 use Laras\Facades\Redis;
 use Laras\Http\Request;
 use Laras\Http\Response;
+use Exception;
 
 class RateLimitor
 {
@@ -15,7 +16,8 @@ class RateLimitor
      * @param Request $request
      * @param Response $response
      * @param Closure $next
-     * @return bool|mixed
+     * @return Response|mixed
+     * @throws Exception
      */
     public function handle(Request $request, Response $response, Closure $next)
     {
@@ -30,9 +32,10 @@ class RateLimitor
 
     /**
      * @return bool
+     * @throws Exception
      */
     protected function guarded(): bool
     {
-        return false === Redis::sPop(Config::get('rate.key'));
+        return false === Redis::sPop(Config::get('ratelimitor.key') . ':' . app()->getWorkerId());
     }
 }
