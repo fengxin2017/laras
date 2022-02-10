@@ -3,9 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Exception;
 use Fig\Http\Message\StatusCodeInterface;
-use Laras\Facades\Config;
 use Laras\Facades\Redis;
 use Laras\Http\Request;
 use Laras\Http\Response;
@@ -41,22 +39,5 @@ class RateLimitor
             Redis::incr($key);
             return $next($request, $response);
         }
-
-//        if ($this->guarded()) {
-//            $response->setStatus(StatusCodeInterface::STATUS_FORBIDDEN);
-//            $response->setContent('OVER REQUEST!');
-//            return $response;
-//        }
-//
-//        return $next($request, $response);
-    }
-
-    /**
-     * @return bool
-     * @throws Exception
-     */
-    protected function guarded(): bool
-    {
-        return false === Redis::sPop(Config::get('ratelimitor.key') . ':' . app()->getWorkerId());
     }
 }
