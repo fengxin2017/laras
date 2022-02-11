@@ -8,8 +8,6 @@ use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Translation\TranslationServiceProvider;
 use Illuminate\Validation\ValidationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
-use Laras\Annotation\AnnotationServiceProvider;
-use Laras\Aspect\AspectServiceProvider;
 use Laras\Auth\AuthServiceProvider;
 use Laras\Crontab\CrontabServiceProvider;
 use Laras\Database\DatabaseServiceProvider;

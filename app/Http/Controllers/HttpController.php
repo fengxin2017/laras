@@ -27,12 +27,12 @@ class HttpController extends BaseController
 {
     public function index(Request $request)
     {
-        var_dump($this->foo);
+        return 3333;
 //        var_dump($request->get('foo'));
         //$user = User::query()->first();
         //return $user;
-//        $user = DB::table('users')->first();
-        //return $user;
+        $user = DB::table('user')->first();
+//        return $user;
 //        return DB::table('users')->get();
 //        $user = User::query()->first();
         return '333333555555556669999';

@@ -25,7 +25,7 @@ class FooAspect extends AbstractAspect
      * @var array
      */
     public $annotations = [
-        Middleware::class
+        //Middleware::class
     ];
 
     /**

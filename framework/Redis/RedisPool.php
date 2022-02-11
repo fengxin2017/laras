@@ -4,8 +4,8 @@
 namespace Laras\Redis;
 
 
-use Laras\Container\Container;
 use Laras\Facades\Config;
+use Laras\Foundation\Application;
 use Laras\Pool\Pool;
 use Swoole\Coroutine\Channel;
 
@@ -40,7 +40,7 @@ class RedisPool extends Pool
     public static function getInstance(int $min = 100, int $max = 500): self
     {
         if (is_null(static::$instance)) {
-            static::$instance = new static(Container::getInstance(), $min, $max);
+            static::$instance = new static(Application::getInstance(), $min, $max);
         }
 
         return static::$instance;

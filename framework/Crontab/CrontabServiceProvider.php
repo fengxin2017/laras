@@ -2,7 +2,7 @@
 
 namespace Laras\Crontab;
 
-use App\Annotations\Crontab;
+use Laras\Support\Annotation\Crontab;
 use App\Crontab\Kernel;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
@@ -11,6 +11,7 @@ use Laras\Contracts\Foundation\Application;
 use Laras\Facades\Log;
 use Laras\Facades\Redis;
 use Swoole\Coroutine;
+use Swoole\Process;
 use Swoole\Timer;
 use Throwable;
 
@@ -102,18 +103,29 @@ class CrontabServiceProvider extends ServiceProvider
                     $jobs = Redis::zRangeByScore('crontabJob', '-inf', $now);
                     Redis::zRemRangeByScore('crontabJob', '-inf', $now);
                     foreach ($jobs as $job) {
-                        Coroutine::create(
-                            function () use ($job) {
-                                try {
-                                    $job = unserialize($job);
-                                    $job->execute();
-                                } catch (Throwable $throwable) {
-                                    Log::error($throwable->getMessage());
-                                    Redis::lpush('crontabFailedJob', serialize($job));
-                                }
-                            }
-                        );
+                        try {
+                            $job = unserialize($job);
+                            $job->execute();
+                        } catch (Throwable $throwable) {
+                            Log::error($throwable->getMessage());
+                            Redis::lpush('crontabFailedJob', serialize($job));
+                        }
                     }
+//                    var_dump(66666);
+//                    Coroutine::create(function(){
+//                        $now  = time();
+//                        $jobs = Redis::zRangeByScore('crontabJob', '-inf', $now);
+//                        Redis::zRemRangeByScore('crontabJob', '-inf', $now);
+//                        foreach ($jobs as $job) {
+//                            try {
+//                                $job = unserialize($job);
+//                                $job->execute();
+//                            } catch (Throwable $throwable) {
+//                                Log::error($throwable->getMessage());
+//                                Redis::lpush('crontabFailedJob', serialize($job));
+//                            }
+//                        }
+//                    });
                 }
             );
         }

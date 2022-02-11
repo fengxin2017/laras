@@ -16,11 +16,6 @@ use Laras\Support\Annotation\Inject;
 class BaseController
 {
     /**
-     * @Inject(Foo::class)
-     */
-    public $foo;
-
-    /**
      * Controller constructor.
      */
     public function __construct()

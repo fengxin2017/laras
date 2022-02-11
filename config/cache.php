@@ -5,8 +5,8 @@ use Laras\Redis\RedisManager;
 return [
     'driver' => RedisManager::class,
     'redis_pool' => [
-        'min' => 300,
-        'max' => 500,
+        'min' => 3000,
+        'max' => 5000,
         'idletime' => 60,
         'host' => 'localhost',
         'port' => '6379',
