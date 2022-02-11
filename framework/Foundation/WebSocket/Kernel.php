@@ -29,10 +29,19 @@ class Kernel extends HttpKernel implements KernelContract
         $webSocketResponse = new WebSocketResponse($swooleResponse);
         $this->bindWebSocketRequest($webSocketRequest);
         $this->binWebSocketResponse($webSocketResponse);
-        $this->app->make(Pipeline::class)
+        $response = $this->app->make(Pipeline::class)
             ->send($webSocketRequest, $webSocketResponse)
             ->through($this->middleware)
             ->then($this->dispatchToRouter());
+
+        if (!is_null($response)) {
+            if ($response instanceof WebSocketResponse) {
+                $response->push();
+            } else {
+                $webSocketResponse->setWebSocketResponseData($response);
+                $webSocketResponse->push();
+            }
+        }
     }
 
     public function bindWebSocketRequest(WebSocketRequest $webSocketRequest)

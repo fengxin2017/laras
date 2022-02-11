@@ -14,7 +14,7 @@ class WebSocketController extends BaseController
         $content = <<<HTML
     <h1>Swoole WebSocket Server</h1>
     <script>
-var wsServer = 'ws://192.168.20.10:9505/websocket/hello';
+var wsServer = 'ws://192.168.10.10:9502/websocket/hello';
 var websocket = new WebSocket(wsServer);
 websocket.onopen = function (evt) {
     console.log("Connected to WebSocket server.");
@@ -42,8 +42,9 @@ HTML;
     public function hello(Request $request, Response $response)
     {
         var_dump($request->getFrame());
+        return 'hello lily';
         //var_dump($request->getMessage());
-        $response->push('hello client');
+        return $response->setWebSocketResponseData('hello client');
     }
 
     public function close(Request $request, Response $response)

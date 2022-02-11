@@ -12,6 +12,8 @@ class Response extends LarasResponse
      */
     protected $webSocketResponse;
 
+    protected $webSocketResponseData;
+
     /**
      * Response constructor.
      * @param SwooleResponse $response
@@ -22,9 +24,16 @@ class Response extends LarasResponse
         $this->webSocketResponse = $response;
     }
 
-    public function push($data)
+    public function setWebSocketResponseData($data)
     {
-        $this->swooleResponse->push($data);
+        $this->webSocketResponseData = $data;
+
+        return $this;
+    }
+
+    public function push()
+    {
+        $this->swooleResponse->push($this->webSocketResponseData);
     }
 
     public function close()
