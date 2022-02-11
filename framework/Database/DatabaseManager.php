@@ -9,6 +9,11 @@ use Exception;
 use Laras\Facades\Config;
 use PDO;
 
+/**
+ * @deprecated we will use laravel database manager
+ * Class DatabaseManager
+ * @package Laras\Database
+ */
 class DatabaseManager
 {
     /**

@@ -6,5 +6,5 @@ use Laras\Foundation\Tcp\Kernel;
 
 class TcpKernel extends Kernel
 {
-    // support rpc rewrite handle method.
+    // rpc supported could rewrite 'handle' method
 }

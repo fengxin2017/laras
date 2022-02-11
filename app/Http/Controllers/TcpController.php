@@ -10,6 +10,6 @@ class TcpController extends BaseController
 {
     public function handle(Request $request)
     {
-        $request->getConnection()->send($request->getRequestData());
+        $request->getConnection()->send($request->getRequestRaw());
     }
 }

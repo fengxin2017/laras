@@ -14,7 +14,7 @@ class Request
     protected $connection;
 
 
-    protected $requestData;
+    protected $requestRaw;
 
     /**
      * TcpRequest constructor.
@@ -24,7 +24,7 @@ class Request
     public function __construct(Connection $connection, $requestRaw)
     {
         $this->connection = $connection;
-        $this->requestData = $requestRaw;
+        $this->requestRaw = $requestRaw;
     }
 
     /**
@@ -38,8 +38,8 @@ class Request
     /**
      * @return mixed
      */
-    public function getRequestData()
+    public function getRequestRaw()
     {
-        return $this->requestData;
+        return $this->requestRaw;
     }
 }
