@@ -3,8 +3,7 @@
 
 namespace Laras\Server;
 
-
-use App\Http\Kernel;
+use App\Http\WebSocketKernel;
 use Laras\Facades\Config;
 use Laras\Facades\Log;
 use Swoole\Coroutine;
@@ -22,15 +21,15 @@ class WebsocketServer
     protected $swooleServer;
 
     /**
-     * @var Kernel $kernel
+     * @var WebSocketKernel $kernel
      */
     protected $kernel;
 
     /**
      * WebsocketServer constructor.
-     * @param Kernel $kernel
+     * @param WebSocketKernel $kernel
      */
-    public function __construct(Kernel $kernel)
+    public function __construct(WebSocketKernel $kernel)
     {
         $this->kernel = $kernel;
         $this->swooleServer = new Server(
@@ -86,8 +85,7 @@ class WebsocketServer
             function (SwooleRequest $request, SwooleResponse $response) {
                 if (isset($request->header['upgrade']) && $request->header['upgrade'] === 'websocket') {
                     $response->upgrade();
-                    $handShakeHandler = $this->kernel->getApplication(
-                        )['config']['server.websocket.on_hand_shake'] ?? [];
+                    $handShakeHandler = $this->kernel->getApplication()['config']['server.websocket.on_hand_shake'] ?? [];
 
                     if (!empty($handShakeHandler)) {
                         call_user_func_array([$handShakeHandler[0], $handShakeHandler[1]], [$request, $response]);

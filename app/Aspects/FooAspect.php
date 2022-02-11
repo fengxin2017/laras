@@ -35,9 +35,9 @@ class FooAspect extends AbstractAspect
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
-        var_dump('i got u');
+        var_dump('aspect before middleware');
         $result = $proceedingJoinPoint->process();
-        var_dump('over');
+        var_dump('aspect after middleware');
         return $result;
     }
 }

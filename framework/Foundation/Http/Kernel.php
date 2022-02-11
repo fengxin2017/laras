@@ -4,12 +4,10 @@
 namespace Laras\Foundation\Http;
 
 use App\Exceptions\ExceptionHandler;
-use App\Http\Controllers\TcpController;
 use Closure;
 use Exception;
 use FastRoute\Dispatcher;
 use Fig\Http\Message\StatusCodeInterface;
-use Illuminate\Container\Util;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\View\View;
 use Laras\Contracts\Foundation\Application;
@@ -19,12 +17,6 @@ use Laras\Http\Request;
 use Laras\Http\Response;
 use Laras\Pipe\Pipeline;
 use Laras\Router\Router;
-use Laras\Tcp\Request as TcpReqeust;
-use Laras\WebSocket\Request as WebSocketRequest;
-use Laras\WebSocket\Response as WebSocketResponse;
-use ReflectionClass;
-use ReflectionException;
-use Swoole\Coroutine\Server\Connection;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -157,94 +149,6 @@ class Kernel implements KernelContract
             Response::class,
             function () use ($larasResponse) {
                 return $larasResponse;
-            }
-        );
-    }
-
-    /**
-     * @param Connection $connection
-     * @param $requestData
-     * @throws ReflectionException
-     */
-    public function handleTcp(Connection $connection, $requestData)
-    {
-        $tcpRequest = new TcpReqeust($connection, $requestData);
-        $this->bindTcpResquest($tcpRequest);
-
-        $constructorParams = $handlerParams = [];
-
-        $reflectController = new ReflectionClass(TcpController::class);
-        $reflectConstructor = $reflectController->getConstructor();
-        $parameters = $reflectController->getMethod('handle')->getParameters();
-
-        if (is_null($reflectConstructor)) {
-            $tcpController = new TcpController();
-        } else {
-            $constructorParameters = $reflectConstructor->getParameters();
-            foreach ($constructorParameters as $constructorParameter) {
-                $constructorParams[] = $this->app->coMake(
-                    Util::getParameterClassName($constructorParameter)
-                );
-            }
-            $tcpController = $reflectController->newInstanceArgs($constructorParams);
-        }
-
-        foreach ($parameters as $parameter) {
-            $handlerParams[] = $this->app->coMake(
-                Util::getParameterClassName($parameter)
-            );
-        }
-
-        call_user_func_array([$tcpController, 'handle'], $handlerParams);
-    }
-
-    /**
-     * @param TcpReqeust $tcpRequest
-     */
-    public function bindTcpResquest(TcpReqeust $tcpRequest)
-    {
-        $this->app->coBind(
-            TcpReqeust::class,
-            function () use ($tcpRequest) {
-                return $tcpRequest;
-            }
-        );
-    }
-
-    /**
-     * @param SwooleRequest $swooleRequest
-     * @param SwooleResponse $swooleResponse
-     * @param $frame
-     * @throws BindingResolutionException
-     */
-    public function handleWebSocket(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse, $frame)
-    {
-        $webSocketRequest = new WebSocketRequest($swooleRequest, $frame);
-        $webSocketResponse = new WebSocketResponse($swooleResponse);
-        $this->bindWebSocketRequest($webSocketRequest);
-        $this->binWebSocketResponse($webSocketResponse);
-        $this->app->make(Pipeline::class)
-            ->send($webSocketRequest, $webSocketResponse)
-            ->through($this->middleware)
-            ->then($this->dispatchToRouter());
-    }
-
-    public function bindWebSocketRequest(WebSocketRequest $webSocketRequest)
-    {
-        $this->app->coBind(
-            WebSocketRequest::class,
-            function () use ($webSocketRequest) {
-                return $webSocketRequest;
-            }
-        );
-    }
-
-    public function binWebSocketResponse(WebSocketResponse $webSocketResponse)
-    {
-        $this->app->coBind(
-            WebSocketResponse::class,
-            function () use ($webSocketResponse) {
-                return $webSocketResponse;
             }
         );
     }

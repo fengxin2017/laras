@@ -14,11 +14,9 @@ class Jim
      * @param Closure $next
      * @return bool|mixed
      */
-    public function handle(Request $request, Response $response, Closure $next,$a,$b)
+    public function handle(Request $request, Response $response, Closure $next)
     {
         var_dump('this is jim middleware');
-        var_dump($a);
-        var_dump($b);
         //return $response->setContent('invalid request')->setHeader('Content-type','text/html')->setStatus(401);
         return $next($request, $response);
     }

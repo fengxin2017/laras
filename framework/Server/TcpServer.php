@@ -5,7 +5,7 @@ namespace Laras\Server;
 
 
 use Laras\Facades\Config;
-use Laras\Foundation\Http\Kernel;
+use App\Tcp\TcpKernel;
 use Swoole\Coroutine\Server;
 use Swoole\Coroutine\Server\Connection;
 use Swoole\Exception;
@@ -18,16 +18,16 @@ class TcpServer
     protected $swooleServer;
 
     /**
-     * @var \App\Http\Kernel $kernel
+     * @var TcpKernel $kernel
      */
     protected $kernel;
 
     /**
      * TcpServer constructor.
-     * @param Kernel $kernel
+     * @param TcpKernel $kernel
      * @throws Exception
      */
-    public function __construct(Kernel $kernel)
+    public function __construct(TcpKernel $kernel)
     {
         $this->kernel = $kernel;
         $this->swooleServer = new Server(
@@ -49,7 +49,7 @@ class TcpServer
             while (true) {
                 $requestData = $conn->recv();
                 //发送数据
-                $this->kernel->handleTcp($conn, $requestData);
+                $this->kernel->handle($conn, $requestData);
             }
         });
     }

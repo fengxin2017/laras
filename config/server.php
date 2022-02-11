@@ -14,7 +14,7 @@ use App\SwooleEvents\OnHandShake;
 
 return [
     'http' => [
-        'worker_number' => 2,
+        'worker_number' => 0,
         'listen' => '0.0.0.0',
         'port' => 9501,
         'ssl' => false,

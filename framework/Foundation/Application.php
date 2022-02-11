@@ -17,7 +17,12 @@ use Laras\Contracts\Foundation\Application as ApplicationContract;
 use Laras\Contracts\Foundation\Application as ApplicationContrat;
 use Laras\Foundation\Bootstrap\RegisterFacades;
 use Laras\Foundation\Http\Kernel;
+use Laras\Foundation\Tcp\Kernel as TcpKernel;
+use Laras\Foundation\WebSocket\Kernel as WebSocketKernel;
 use Laras\Pipe\Pipeline;
+use Laras\Server\HttpServer;
+use Laras\Server\TcpServer;
+use Laras\Server\WebsocketServer;
 use ReflectionException;
 use Swoole\Coroutine\Context;
 use Swoole\Process;
@@ -64,6 +69,11 @@ class Application extends Container implements ApplicationContract
     protected $deferredServiceProviders = [];
 
     /**
+     * @var string $serverType
+     */
+    protected $serverType;
+
+    /**
      * @var mixed $server
      */
     protected $server;
@@ -86,9 +96,10 @@ class Application extends Container implements ApplicationContract
      */
     public function __construct(Pool $pool, Process $worker, string $server)
     {
-        $this->pool   = $pool;
+        $this->pool = $pool;
         $this->worker = $worker;
         $this->registerContext();
+        $this->registerServerType($server);
         $this->setBasePath(ROOT_PATH);
         $this->LoadEnvironmentVariables();
         $this->registerBaseBindings();
@@ -294,26 +305,32 @@ class Application extends Container implements ApplicationContract
         $this->alias(ApplicationContrat::class, ContainerContract::class);
         $this->alias(ContainerContract::class, 'container');
 
-        $this->instance(Kernel::class, new Kernel($this));
+        if ($this->serverType == 'Http') {
+            $this->instance(Kernel::class, new Kernel($this));
+        } elseif ($this->serverType == 'Tcp') {
+            $this->instance(TcpKernel::class, new TcpKernel($this));
+        } elseif ($this->serverType == 'WebSocket') {
+            $this->instance(WebSocketKernel::class, new WebSocketKernel($this));
+        }
+
         $this->instance(Pipeline::class, new Pipeline());
     }
 
     /**
      * @throws BindingResolutionException
-     * @throws ReflectionException
      */
     public function bootstrap()
     {
         foreach ($this->bootstrappers as $bootstrapper) {
             $this->make($bootstrapper)
-                 ->bootstrap($this);
+                ->bootstrap($this);
         }
     }
 
     public function registerBaseServiceProviders()
     {
         $configServiceProvider = new ConfigServiceProvider($this);
-        $eventServiceProvider  = new EventServiceProvider($this);
+        $eventServiceProvider = new EventServiceProvider($this);
         foreach ([$configServiceProvider, $eventServiceProvider] as $baseServiceProvider) {
             if (method_exists($baseServiceProvider, 'register')) {
                 $baseServiceProvider->register();
@@ -337,6 +354,27 @@ class Application extends Container implements ApplicationContract
                 }
                 $this->eagerLoadedServiceProviders[] = $serviceProvider;
             }
+        }
+    }
+
+    /**
+     * @param string $server
+     * @throws Exception
+     */
+    protected function registerServerType(string $server)
+    {
+        switch ($server) {
+            case  HttpServer::class:
+                $this->serverType = 'Http';
+                break;
+            case TcpServer::class:
+                $this->serverType = 'Tcp';
+                break;
+            case WebsocketServer::class:
+                $this->serverType = 'WebSocket';
+                break;
+            default:
+                throw new Exception(sprintf('Invalid server %s', $server));
         }
     }
 
@@ -413,7 +451,6 @@ class Application extends Container implements ApplicationContract
      * @param array $parameters
      * @return mixed
      * @throws BindingResolutionException
-     * @throws ReflectionException
      */
     public function make($abstract, array $parameters = [])
     {

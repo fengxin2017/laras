@@ -18,7 +18,7 @@ class RateLimitor
      * @param int|null $counts
      * @return Response|mixed
      */
-    public function handle(Request $request, Response $response, Closure $next, ?int $seconds, ?int $counts)
+    public function handle(Request $request, Response $response, Closure $next, ?int $seconds = null, ?int $counts = null)
     {
         if (is_null($seconds) || is_null($counts)) {
             return $next($request, $response);

@@ -197,11 +197,11 @@ class Router
                 foreach ($annotations as $annotation) {
                     if ($annotation instanceof Middleware) {
                         $annotationMiddlewares = [];
-                        foreach (Arr::wrap($annotation->middlewares['value']) as $key => $annotationMiddleware) {
+                        foreach (Arr::wrap($annotation->middlewares['value']) as $key => $annotationMiddlewareOrParams) {
                             if (is_numeric($key)) {
-                                $annotationMiddlewares[] = $annotationMiddleware;
+                                $annotationMiddlewares[] = $annotationMiddlewareOrParams;
                             } else {
-                                $annotationMiddlewares[] = $key . ':' . $annotationMiddleware;
+                                $annotationMiddlewares[] = $key . ':' . $annotationMiddlewareOrParams;
                             }
                         }
 

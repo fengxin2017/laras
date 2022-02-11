@@ -86,7 +86,7 @@ class HttpController extends BaseController
     }
 
     /**
-     * @Middleware({Jim::class:"1,3",Tool::class:"2,4"})
+     * @Middleware({Jim::class,Tool::class:"2,4"})
      * @param Response $response
      * @return mixed
      * @throws Exception
@@ -97,11 +97,13 @@ class HttpController extends BaseController
     }
 
     /**
-     * @Middleware({RateLimitor::class:"1,3"})
+     * 传递参数到middleware必须使用{}形式
+     * @Middleware({RateLimitor::class:"1,2",Jim::class})
      * @return string
      */
     public function ratelimit()
     {
+        var_dump('controller->call');
         return 'test';
     }
 

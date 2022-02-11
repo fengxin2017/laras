@@ -19,12 +19,12 @@ class Request
     /**
      * TcpRequest constructor.
      * @param Connection $connection
-     * @param $requestData
+     * @param $requestRaw
      */
-    public function __construct(Connection $connection, $requestData)
+    public function __construct(Connection $connection, $requestRaw)
     {
         $this->connection = $connection;
-        $this->requestData = $requestData;
+        $this->requestData = $requestRaw;
     }
 
     /**
