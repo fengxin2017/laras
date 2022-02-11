@@ -12,7 +12,7 @@ use Laras\Annotation\AnnotationCollector;
 use Laras\Foundation\Application;
 use Laras\Http\Request;
 use Laras\Http\Response;
-use Laras\Pipe\Pipeline;
+use Laras\Http\Pipeline;
 use Laras\Support\Annotation\Middleware;
 use ReflectionException;
 use ReflectionMethod;

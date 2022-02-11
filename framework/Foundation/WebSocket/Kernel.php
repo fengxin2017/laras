@@ -8,7 +8,7 @@ use Laras\Contracts\Foundation\Application;
 use Laras\Contracts\WebSocket\Kernel as KernelContract;
 use Laras\Facades\Log;
 use Laras\Foundation\Http\Kernel as HttpKernel;
-use Laras\Pipe\Pipeline;
+use Laras\Websocket\Pipeline;
 use Laras\WebSocket\Request as WebSocketRequest;
 use Laras\WebSocket\Response as WebSocketResponse;
 use Swoole\Http\Request as SwooleRequest;

@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Laras\Composer\ClassLoader;
 use Laras\Foundation\Application;
+use Laras\Process\CrontabProcess;
 use Laras\Server\HttpServer;
 use Laras\Server\TcpServer;
 use Laras\Server\WebsocketServer;
@@ -104,7 +105,7 @@ class Portal extends Command
         $this->style = new SymfonyStyle($this->input, $this->output);
 
         try {
-            if($this->watchConfig['on'] === true){
+            if ($this->watchConfig['on'] === true) {
                 if ($this->watchConfig['driver'] == 'inotify') {
                     $this->addInotifyProcess();
                 } else {
@@ -274,40 +275,32 @@ class Portal extends Command
             $webSocketWorkerNumber--;
         }
 
+
         $this->table = new Table($this->output);
         $this->showLogo();
         $this->showComponents($serverConfig);
-        $pool = new Pool($poolNumber, SWOOLE_IPC_UNIXSOCK, 0, true);
+        $processManager = new Process\ProcessManager(SWOOLE_IPC_NONE, 0);
 
-        $pool->on(
-            'WorkerStart',
-            function (Pool $pool, $workerId) use ($serverConfig, $serverTypes) {
+        foreach ($serverTypes as $serverType) {
+            $processManager->add(function (Pool $pool, int $workerId) use ($serverConfig, $serverType) {
                 /**@var Process $worker */
                 $worker = $pool->getProcess();
-                $type = $serverTypes[$workerId];
 
-                $onWorkerStartHandler = $serverConfig[$type]['on_worker_start'] ?? [];
+                $onWorkerStartHandler = $serverConfig[$serverType]['on_worker_start'] ?? [];
                 if (!empty($onWorkerStartHandler)) {
                     call_user_func_array([$onWorkerStartHandler[0], $onWorkerStartHandler[1]], [$pool, $worker]);
                 }
 
-                $this->$type($pool, $worker);
-            }
-        );
-        $pool->on(
-            'WorkerStop',
-            function (Pool $pool, $workerId) use ($serverConfig, $serverTypes) {
-                $worker = $pool->getProcess();
-                $type = $serverTypes[$workerId];
+                $this->$serverType($pool, $worker);
+            }, true);
+        }
 
-                $onWorkerStopHandler = $serverConfig[$type]['on_worker_stop'] ?? [];
-                if (!empty($onWorkerStopHandler)) {
-                    call_user_func_array([$onWorkerStopHandler[0], $onWorkerStopHandler[1]], [$pool, $worker]);
-                }
-            }
-        );
+        $processManager->add(function (Pool $pool, int $workerId) {
+            $worker = $pool->getProcess();
+            (new Application($pool, $worker, CrontabProcess::class))->runProcess();
+        }, true);
 
-        $pool->start();
+        $processManager->start();
 
         return 0;
     }

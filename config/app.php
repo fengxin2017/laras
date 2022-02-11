@@ -124,7 +124,7 @@ return [
         FilesystemServiceProvider::class,
         TranslationServiceProvider::class,
         ValidationServiceProvider::class,
-        CrontabServiceProvider::class,
+        //CrontabServiceProvider::class,
         ViewServiceProvider::class,
         MailServiceProvider::class,
         HashServiceProvider::class

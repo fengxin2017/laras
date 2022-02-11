@@ -15,7 +15,7 @@ use Laras\Contracts\Http\Kernel as KernelContract;
 use Laras\Facades\Log;
 use Laras\Http\Request;
 use Laras\Http\Response;
-use Laras\Pipe\Pipeline;
+use Laras\Http\Pipeline;
 use Laras\Router\Router;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;

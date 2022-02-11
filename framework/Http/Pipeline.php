@@ -1,13 +1,11 @@
 <?php
 
-namespace Laras\Pipe;
+namespace Laras\Http;
 
 use Closure;
-use Laras\Http\Request;
-use Laras\Http\Response;
-use Throwable;
-use Laras\Contracts\Pipe\PipelineContract;
 use Exception;
+use Laras\Contracts\Pipe\PipelineContract;
+use Throwable;
 
 class Pipeline implements PipelineContract
 {

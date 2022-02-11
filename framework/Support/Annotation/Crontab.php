@@ -15,11 +15,6 @@ class Crontab
     /**
      * @var mixed|null
      */
-    public $name;
-
-    /**
-     * @var mixed|null
-     */
     public $rule;
 
     /**
@@ -28,7 +23,6 @@ class Crontab
      */
     public function __construct(array $value)
     {
-        $this->name = $value['name'] ?? null;
         $this->rule = $value['rule'] ?? null;
     }
 }

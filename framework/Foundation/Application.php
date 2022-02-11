@@ -19,7 +19,8 @@ use Laras\Foundation\Bootstrap\RegisterFacades;
 use Laras\Foundation\Http\Kernel;
 use Laras\Foundation\Tcp\Kernel as TcpKernel;
 use Laras\Foundation\WebSocket\Kernel as WebSocketKernel;
-use Laras\Pipe\Pipeline;
+use Laras\Http\Pipeline as HttpPipeline;
+use Laras\Websocket\Pipeline as WebsocketPipeline;
 use Laras\Server\HttpServer;
 use Laras\Server\TcpServer;
 use Laras\Server\WebsocketServer;
@@ -307,13 +308,13 @@ class Application extends Container implements ApplicationContract
 
         if ($this->serverType == 'Http') {
             $this->instance(Kernel::class, new Kernel($this));
+            $this->instance(Pipeline::class, new HttpPipeline());
         } elseif ($this->serverType == 'Tcp') {
             $this->instance(TcpKernel::class, new TcpKernel($this));
         } elseif ($this->serverType == 'WebSocket') {
             $this->instance(WebSocketKernel::class, new WebSocketKernel($this));
+            $this->instance(Pipeline::class, new WebsocketPipeline());
         }
-
-        $this->instance(Pipeline::class, new Pipeline());
     }
 
     /**
@@ -359,7 +360,6 @@ class Application extends Container implements ApplicationContract
 
     /**
      * @param string $server
-     * @throws Exception
      */
     protected function registerServerType(string $server)
     {
@@ -374,7 +374,8 @@ class Application extends Container implements ApplicationContract
                 $this->serverType = 'WebSocket';
                 break;
             default:
-                throw new Exception(sprintf('Invalid server %s', $server));
+                // handle process
+                $this->serverType = $server;
         }
     }
 
@@ -436,6 +437,12 @@ class Application extends Container implements ApplicationContract
         }
 
         $this->server->start();
+    }
+
+    public function runProcess()
+    {
+        $this->server->setApp($this);
+        return $this->server->process();
     }
 
     /**
