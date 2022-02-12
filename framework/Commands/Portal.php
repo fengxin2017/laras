@@ -4,12 +4,13 @@ namespace Laras\Commands;
 
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Laras\Annotation\AnnotationCollector;
 use Laras\Composer\ClassLoader;
 use Laras\Foundation\Application;
-use Laras\Process\CrontabProcess;
 use Laras\Server\HttpServer;
 use Laras\Server\TcpServer;
 use Laras\Server\WebsocketServer;
+use Laras\Support\Annotation\Process as AnnotatationProcess;
 use Laras\Watcher\Inotify;
 use ReflectionException;
 use Swoole\Coroutine;
@@ -255,11 +256,25 @@ class Portal extends Command
     public function start()
     {
         $serverConfig = require ROOT_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'server.php';
+        $processes = require ROOT_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'process.php';
+        $annotationProcesses = [];
+        $annotations = AnnotationCollector::getContainer();
+        foreach ($annotations as $class => $annotation) {
+            if (isset($annotation['c'])) {
+                foreach ($annotation['c'] as $item) {
+                    if ($item instanceof AnnotatationProcess) {
+                        $annotationProcesses[] = $class;
+                    }
+                }
+            }
+        }
+
+        $processes = array_unique(array_merge($processes, $annotationProcesses));
+
         $serverTypes = [];
         $httpWorkerNumber = (int)($serverConfig['http']['worker_number'] ?? 0);
         $tcpWorkerNumber = (int)($serverConfig['tcp']['worker_number'] ?? 0);
         $webSocketWorkerNumber = (int)($serverConfig['websocket']['worker_number'] ?? 0);
-        $poolNumber = $httpWorkerNumber + $tcpWorkerNumber + $webSocketWorkerNumber;
         while ($httpWorkerNumber > 0) {
             $serverTypes[] = 'http';
             $httpWorkerNumber--;
@@ -295,10 +310,13 @@ class Portal extends Command
             }, true);
         }
 
-        $processManager->add(function (Pool $pool, int $workerId) {
-            $worker = $pool->getProcess();
-            (new Application($pool, $worker, CrontabProcess::class))->runProcess();
-        }, true);
+        foreach ($processes as $process) {
+            $processManager->add(function (Pool $pool, int $workerId) use ($process) {
+                $worker = $pool->getProcess();
+                (new Application($pool, $worker, $process))->runProcess();
+            }, true);
+        }
+
 
         $processManager->start();
 

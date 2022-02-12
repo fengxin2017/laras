@@ -14,6 +14,11 @@ use Laras\Facades\Redis;
 use Laras\Support\Annotation\Crontab;
 use Swoole\Coroutine;
 
+/**
+ * Class CrontabProcess
+ * @\Laras\Support\Annotation\Process()
+ * @package Laras\Process
+ */
 class CrontabProcess extends Process
 {
     /**

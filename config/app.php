@@ -9,10 +9,8 @@ use Illuminate\Translation\TranslationServiceProvider;
 use Illuminate\Validation\ValidationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
 use Laras\Auth\AuthServiceProvider;
-use Laras\Crontab\CrontabServiceProvider;
 use Laras\Database\DatabaseServiceProvider;
 use Laras\Redis\RedisServiceProvider;
-use Laras\Support\RateLimitorServiceProvider;
 
 return [
     /*
@@ -124,7 +122,6 @@ return [
         FilesystemServiceProvider::class,
         TranslationServiceProvider::class,
         ValidationServiceProvider::class,
-        //CrontabServiceProvider::class,
         ViewServiceProvider::class,
         MailServiceProvider::class,
         HashServiceProvider::class
@@ -166,7 +163,8 @@ return [
         ],
         'classes' => [
             \Laras\Support\Aspect\ControllerAspect::class,
-            \Laras\Support\Aspect\InjectAspect::class
+            \Laras\Support\Aspect\InjectAspect::class,
+            \Laras\Process\CrontabProcess::class
         ],
     ]
 ];
