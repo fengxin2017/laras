@@ -28,13 +28,17 @@ use Laras\Support\Annotation\Middleware;
  */
 class HttpController extends BaseController
 {
-    public function index(Request $request)
+    public function index()
     {
+        //var_dump($this->app);
+
+        return $this->request->get('foo');
+        var_dump($this->request->get('foo'));
         //return 3333;
 //        var_dump($request->get('foo'));
         //$user = User::query()->first();
         //return $user;
-        DB::table('user')->first();
+        //DB::table('user')->first();
 
 //        return $user;
 //        return DB::table('users')->get();
