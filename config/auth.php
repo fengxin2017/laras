@@ -3,5 +3,9 @@
 use App\Models\User;
 
 return [
-    'model' => User::class
+    'model' => User::class,
+    'token' => [
+        // 续命时间
+        'renewal' => 3600
+    ]
 ];

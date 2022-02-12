@@ -20,7 +20,7 @@ class Authenticate
      */
     public function handle(Request $request, Response $response, Closure $next)
     {
-        if (Auth::check()) {
+        if (Auth::jwtCheck()) {
             return $next($request, $response);
         }
         return $response->setStatus(StatusCodeInterface::STATUS_UNAUTHORIZED)

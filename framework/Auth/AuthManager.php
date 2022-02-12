@@ -5,8 +5,10 @@ namespace Laras\Auth;
 
 
 use Laras\Contracts\Auth\Authenticatable;
+use Laras\Facades\Crypt;
 use Laras\Facades\Redis;
 use Laras\Facades\Request;
+use Exception;
 
 class AuthManager
 {
@@ -45,7 +47,8 @@ class AuthManager
 
     /**
      * @param string $token
-     * @return bool|mixed
+     * @return bool
+     * @throws Exception
      */
     public function attemptWithToken(string $token)
     {
@@ -68,6 +71,20 @@ class AuthManager
         }
 
         return $this->user->getAuthIdentifier();
+    }
+
+    /**
+     * @param Authenticatable $user
+     * @param int $expire
+     * @return string
+     */
+    public function jwtloginUser(Authenticatable $user, int $expire)
+    {
+        $token = Crypt::encryptString('laras:auth|' . $user->getAuthIdentifier() . '|' . microtime(true) . ':' . mt_rand(10000000, 99999999));
+        Redis::set($token, true, $expire);
+        $this->setToken($token);
+        $this->user = $user;
+        return $token;
     }
 
     /**
@@ -100,8 +117,9 @@ class AuthManager
 
     /**
      * @return bool
+     * @throws Exception
      */
-    public function checkToken(): bool
+    public function jwtCheck(): bool
     {
         return $this->attemptWithToken(Request::header('token'));
     }
@@ -129,6 +147,13 @@ class AuthManager
         return false;
     }
 
+    /**
+     * @return Authenticatable
+     */
+    public function user()
+    {
+        return $this->user;
+    }
 
     public function __destruct()
     {

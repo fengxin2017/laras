@@ -7,6 +7,8 @@ use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use ReflectionClass;
 use ReflectionParameter;
+use Exception;
+use ReflectionException;
 
 class PhpParser
 {
@@ -54,6 +56,11 @@ class PhpParser
         return $this->parser->parse($code);
     }
 
+    /**
+     * @param ReflectionParameter $parameter
+     * @return Node\Param
+     * @throws ReflectionException
+     */
     public function getNodeFromReflectionParameter(ReflectionParameter $parameter): Node\Param
     {
         $result = new Node\Param(
@@ -99,6 +106,11 @@ class PhpParser
         return $result;
     }
 
+    /**
+     * @param $value
+     * @return Node\Expr
+     * @throws Exception
+     */
     public function getExprFromValue($value): Node\Expr
     {
         switch (gettype($value)) {
@@ -115,11 +127,12 @@ class PhpParser
             case 'boolean':
                 return new Node\Expr\ConstFetch(new Node\Name($value ? 'true' : 'false'));
             default:
-                throw new \Exception($value . ' is invalid');
+                throw new Exception($value . ' is invalid');
         }
     }
 
     /**
+     * @param array $stmts
      * @return Node\Stmt\ClassMethod[]
      */
     public function getAllMethodsFromStmts(array $stmts): array

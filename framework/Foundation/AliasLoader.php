@@ -70,8 +70,8 @@ class AliasLoader
     /**
      * Load a real-time facade for the given alias.
      *
-     * @param string $alias
-     * @return void
+     * @param $alias
+     * @throws \Exception
      */
     protected function loadFacade($alias)
     {
@@ -81,8 +81,9 @@ class AliasLoader
     /**
      * Ensure that the given alias has an existing real-time facade class.
      *
-     * @param string $alias
+     * @param $alias
      * @return string
+     * @throws \Exception
      */
     protected function ensureFacadeExists($alias)
     {
@@ -209,8 +210,7 @@ class AliasLoader
     /**
      * Set the value of the singleton alias loader.
      *
-     * @param \Illuminate\Foundation\AliasLoader $loader
-     * @return void
+     * @param $loader
      */
     public static function setInstance($loader)
     {

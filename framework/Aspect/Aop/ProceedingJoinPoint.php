@@ -9,12 +9,13 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace Laras\Aspect\Aop;
 
 use Closure;
-use Laras\Annotation\AnnotationCollector;
 use Exception;
-//use Hyperf\Di\ReflectionManager;
+use Laras\Annotation\AnnotationCollector;
+use ReflectionException;
 
 class ProceedingJoinPoint
 {
@@ -58,11 +59,13 @@ class ProceedingJoinPoint
 
     /**
      * Delegate to the next aspect.
+     * @return mixed
+     * @throws Exception
      */
     public function process()
     {
         $closure = $this->pipe;
-        if (! $closure instanceof Closure) {
+        if (!$closure instanceof Closure) {
             throw new Exception('The pipe is not instanceof \Closure');
         }
 
@@ -101,17 +104,9 @@ class ProceedingJoinPoint
         });
     }
 
-//    public function getReflectMethod(): \ReflectionMethod
-//    {
-//        return ReflectionManager::reflectMethod(
-//            $this->className,
-//            $this->methodName
-//        );
-//    }
-
     /**
      * @return object|null
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getInstance(): ?object
     {

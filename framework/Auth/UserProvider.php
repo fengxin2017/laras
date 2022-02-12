@@ -6,7 +6,11 @@ namespace Laras\Auth;
 
 use Laras\Contracts\Auth\UserProvider as UserProviderContract;
 use Laras\Facades\Config;
+use Laras\Facades\Crypt;
 use Laras\Facades\Redis;
+use Laras\Foundation\Application;
+use Laras\Http\Request;
+use Exception;
 
 class UserProvider implements UserProviderContract
 {
@@ -27,22 +31,32 @@ class UserProvider implements UserProviderContract
 
     /**
      * @param string $token
-     * @return bool|mixed
+     * @return bool
+     * @throws Exception
      */
     public function retrieveByToken(string $token)
     {
-        $userId = Redis::get($token);
+        if (Redis::exists($token) && ($decrypt = Crypt::decryptString($token))) {
+            $decryptArray = explode('|', $decrypt, 3);
+            if (isset($decryptArray[1])) {
+                $userId = $decryptArray[1];
+                $model = Config::get('auth.model');
 
-        if (!$userId) {
-            return false;
+                if ($user = $model::find($userId)) {
+                    Redis::exists($token) && Redis::expire($token, Config::get('auth.token.renewal'));
+                    /**@var Request $request */
+                    $request = Application::getInstance()->coMake(Request::class);
+                    $request->setUser($user);
+                    Application::getInstance()->coBind(
+                        Request::class,
+                        function () use ($request) {
+                            return $request;
+                        }
+                    );
+                    return $user;
+                }
+            }
         }
-
-        $model = Config::get('auth.model');
-
-        if ($user = $model::find($userId)) {
-            return $user;
-        }
-
         return false;
     }
 }

@@ -308,12 +308,12 @@ class Application extends Container implements ApplicationContract
 
         if ($this->serverType == 'Http') {
             $this->instance(Kernel::class, new Kernel($this));
-            $this->instance(Pipeline::class, new HttpPipeline());
+            $this->instance(HttpPipeline::class, new HttpPipeline());
         } elseif ($this->serverType == 'Tcp') {
             $this->instance(TcpKernel::class, new TcpKernel($this));
         } elseif ($this->serverType == 'WebSocket') {
             $this->instance(WebSocketKernel::class, new WebSocketKernel($this));
-            $this->instance(Pipeline::class, new WebsocketPipeline());
+            $this->instance(WebsocketPipeline::class, new WebsocketPipeline());
         }
     }
 

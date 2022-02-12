@@ -20,7 +20,7 @@ class Crypt extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor()
+    public function getAccessor()
     {
         return 'encrypter';
     }

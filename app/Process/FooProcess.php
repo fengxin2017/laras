@@ -10,7 +10,6 @@ use Swoole\Coroutine;
 
 /**
  * Class FooProcess
- * @Process()
  * @package App\Process
  */
 class FooProcess extends AbstractProcess

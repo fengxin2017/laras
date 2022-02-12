@@ -11,6 +11,7 @@ use Illuminate\View\ViewServiceProvider;
 use Laras\Auth\AuthServiceProvider;
 use Laras\Database\DatabaseServiceProvider;
 use Laras\Redis\RedisServiceProvider;
+use Illuminate\Encryption\EncryptionServiceProvider;
 
 return [
     /*
@@ -100,6 +101,8 @@ return [
 
     'key' => env('APP_KEY'),
 
+    'cipher' => 'AES-256-CBC',
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -124,7 +127,8 @@ return [
         ValidationServiceProvider::class,
         ViewServiceProvider::class,
         MailServiceProvider::class,
-        HashServiceProvider::class
+        HashServiceProvider::class,
+        EncryptionServiceProvider::class
         /*
          * Application Service Providers...
          */

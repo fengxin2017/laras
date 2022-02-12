@@ -2,6 +2,7 @@
 
 namespace Laras\Http;
 
+use Laras\Contracts\Auth\Authenticatable;
 use Swoole\Http\Request as SwooleRequest;
 
 class Request
@@ -27,6 +28,11 @@ class Request
     protected $header;
 
     protected $files;
+
+    /**
+     * @var Authenticatable|null $user
+     */
+    protected $user;
 
     /**
      * Request constructor.
@@ -114,6 +120,24 @@ class Request
     public function all()
     {
         return array_merge($this->get(), $this->post());
+    }
+
+    /**
+     * @param Authenticatable $user
+     * @return $this
+     */
+    public function setUser(Authenticatable $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return Authenticatable|null
+     */
+    public function user()
+    {
+        return $this->user;
     }
 
     /**

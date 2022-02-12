@@ -15,6 +15,8 @@ use Closure;
 use Laras\Annotation\AnnotationCollector;
 use Laras\Aspect\AspectCollector;
 use Laras\Foundation\Application;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use ReflectionException;
 
 trait ProxyTrait
 {
@@ -35,7 +37,7 @@ trait ProxyTrait
      * @param string $method
      * @param array $args
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     protected static function __getParamsMap(string $className, string $method, array $args): array
     {
@@ -58,6 +60,11 @@ trait ProxyTrait
         return $map;
     }
 
+    /**
+     * @param ProceedingJoinPoint $proceedingJoinPoint
+     * @return mixed
+     * @throws BindingResolutionException
+     */
     protected static function handleAround(ProceedingJoinPoint $proceedingJoinPoint)
     {
         $className = $proceedingJoinPoint->className;
@@ -89,6 +96,10 @@ trait ProxyTrait
             });
     }
 
+    /**
+     * @return Pipeline
+     * @throws BindingResolutionException
+     */
     protected static function makePipeline(): Pipeline
     {
         return Application::getInstance()->make(Pipeline::class);

@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\Jim;
 use App\Http\Middleware\RateLimitor;
 use App\Http\Middleware\Tool;
@@ -10,8 +11,10 @@ use App\Jobs\FooJob;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Validation\ValidationException;
+use Laras\Facades\Auth;
 use Laras\Facades\DB;
 use Laras\Facades\Storage;
 use Laras\Facades\View;
@@ -37,6 +40,36 @@ class HttpController extends BaseController
 //        return DB::table('users')->get();
 //        $user = User::query()->first();
         return '333333555555556669999';
+    }
+
+    public function login(Request $request)
+    {
+        $user = User::find(1);
+        return Auth::jwtloginUser($user, 3600);
+    }
+
+    public function testAuth()
+    {
+        $client = new Client();
+        $response = $client->request('get','192.168.10.10:9501/auth',[
+            'headers' => [
+                'token' => 'eyJpdiI6Ikd3ZU5CR0RGQUNLNlZFR1ZxOThrNUE9PSIsInZhbHVlIjoiQ3M0L0QxZ0M2Qkc4a3ZPdjd5RHNJODJVZlM5Y0Y4cWZQMTJCbkhWQkp2T2tjWnVPN3VCV2tITVJnWFEwa0RrUCIsIm1hYyI6IjRkMjc4ZWNhNzQxNzdlYjJjODRhNzAzYmNmMmM1YTdmNzQ4NjE2YjU4MmJlYWYyNzI2MTNhMDE0Y2M2Y2FiZjkifQ=='
+            ]
+        ]);
+
+        return json_decode($response->getBody()->getContents(),true);
+    }
+
+    /**
+     * @Middleware(Authenticate::class)
+     * @param Request $request
+     * @return mixed
+     */
+    public function auth(Request $request)
+    {
+        return \Laras\Facades\Request::user();
+        return $request->user();
+        return Auth::user();
     }
 
     /**

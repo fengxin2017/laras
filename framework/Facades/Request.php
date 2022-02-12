@@ -12,6 +12,7 @@ use Laras\Http\Request as HttpRequest;
  * @method static post(string $key = null)
  * @method static file(string $key = null)
  * @method static header(string $key = null)
+ * @method static user()
  */
 class Request extends Facade
 {
