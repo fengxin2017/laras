@@ -15,7 +15,7 @@ use Throwable;
 /**
  * Class DB
  * @package Laras\Facades
- * @method static first(string $sql,array $bindings = [])
+ * @method static first(string $sql, array $bindings = [])
  * @method static \Illuminate\Database\ConnectionInterface connection(string $name = null)
  * @method static \Illuminate\Database\Query\Builder table(string $table, string $as = null)
  * @method static \Illuminate\Database\Query\Expression raw($value)
@@ -102,7 +102,7 @@ class DB extends Facade
             $timeout = $this->popTimeout;
         }
 
-        $channel = new Coroutine\Channel(1);
+        $channel = new Channel(1);
 
         Coroutine::create(
             function () use ($channel, $closure) {

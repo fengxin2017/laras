@@ -9,8 +9,7 @@ use Laras\Support\Annotation\Inject;
 class FooJob extends Job
 {
     /**
-     * @Inject()
-     * @var Bar
+     * @Inject(Bar::class)
      */
     public $bar;
 

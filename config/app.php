@@ -168,7 +168,8 @@ return [
         'classes' => [
             \Laras\Support\Aspect\ControllerAspect::class,
             \Laras\Support\Aspect\InjectAspect::class,
-            \Laras\Process\CrontabProcess::class
+            \Laras\Crontab\CrontabProcess::class,
+            \Laras\AsyncQueue\ConsumerProcess::class,
         ],
     ]
 ];

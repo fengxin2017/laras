@@ -30,6 +30,7 @@ class HttpController extends BaseController
 {
     public function index()
     {
+        return 3333;
         //var_dump($this->app);
 
         return $this->request->get('foo');
@@ -158,7 +159,14 @@ class HttpController extends BaseController
      */
     public function job()
     {
-        FooJob::dispatch(['name' => 'take idea!'])->delay(Carbon::now()->addSeconds(4));
+        $count = 100;
+        var_dump(Carbon::now()->toDateTimeString());
+        while ($count > 0){
+            FooJob::dispatch(['name' => 'take idea on test queue!->>>>' . $count])->delay(Carbon::now()->addSeconds(4))->onQueue('test');
+            FooJob::dispatch(['name' => 'take idea on default queue!->>>>' . $count])->delay(Carbon::now()->addSeconds(5));
+            $count--;
+        }
+        return 'done';
     }
 
     /**

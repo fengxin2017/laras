@@ -4,8 +4,9 @@ namespace Laras\Crontab;
 
 use Carbon\Carbon;
 use Exception;
+use Laras\Foundation\Bus\Job;
 
-abstract class AbstractCrontab
+abstract class AbstractCrontab extends Job
 {
     /**
      * @var null|string
@@ -67,7 +68,7 @@ abstract class AbstractCrontab
         $this->unique = sha1(__CLASS__ . uniqid() . time());
     }
 
-    abstract public function execute();
+    abstract public function handle();
 
     public function getName(): ?string
     {

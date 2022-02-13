@@ -33,7 +33,7 @@ class RateLimitor
 
         if (Redis::get($key) > $counts) {
             $response->setStatus(StatusCodeInterface::STATUS_FORBIDDEN);
-            $response->setContent('OVER REQUEST!');
+            $response->setContent('request limited');
             return $response;
         } else {
             Redis::incr($key);

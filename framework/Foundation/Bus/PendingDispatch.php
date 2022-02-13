@@ -2,8 +2,8 @@
 
 namespace Laras\Foundation\Bus;
 
-use Carbon\Carbon;
-use Swoole\Timer;
+use Laras\AsyncQueue\Producer;
+use Laras\Foundation\Application;
 
 class PendingDispatch
 {
@@ -40,6 +40,17 @@ class PendingDispatch
     }
 
     /**
+     * @param string $queue
+     * @return $this
+     */
+    public function onQueue(string $queue)
+    {
+        $this->job->onQueue($queue);
+
+        return $this;
+    }
+
+    /**
      * Dynamically proxy methods to the underlying job.
      *
      * @param string $method
@@ -53,27 +64,8 @@ class PendingDispatch
         return $this;
     }
 
-
     public function __destruct()
     {
-        $delay = $this->job->delay;
-
-        if (!$delay) {
-            $this->job->handle();
-            return;
-        }
-
-        if ($delay instanceof Carbon) {
-            $delay = $delay->diffInSeconds(Carbon::now()->subSecond());
-        }
-
-        if ($delay > 0) {
-            Timer::after(
-                $delay * 1000,
-                function () {
-                    $this->job->handle();
-                }
-            );
-        }
+        Application::getInstance()->get(Producer::class)->produce($this->job->getQueue(), $this->job, $this->job->getDelay());
     }
 }
