@@ -8,6 +8,7 @@ use App\Http\Middleware\Jim;
 use App\Http\Middleware\RateLimitor;
 use App\Http\Middleware\Tool;
 use App\Jobs\FooJob;
+use App\Mails\TestMail;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -16,6 +17,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Validation\ValidationException;
 use Laras\Facades\Auth;
 use Laras\Facades\DB;
+use Laras\Facades\Mail;
 use Laras\Facades\Storage;
 use Laras\Facades\View;
 use Laras\Http\Request;
@@ -84,12 +86,11 @@ class HttpController extends BaseController
     {
         var_dump($name);
         var_dump($request->get());
-        var_dump($this->foo->getName());
     }
 
     public function response(Response $response, Request $request)
     {
-        //Mail::to('2169046620@qq.com')->send(new TestMail());
+        Mail::to('2169046620@qq.com')->send(new TestMail());
         // 响应一个字符串
         return 'string';
         // 响应DB

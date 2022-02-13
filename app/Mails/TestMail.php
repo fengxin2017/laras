@@ -12,6 +12,6 @@ class TestMail extends Mailable
 
     public function build()
     {
-        $this->markdown('emails.bar',['name' => 'ffff']);
+        $this->markdown('emails.bar',['name' => 'ffff','url' => 'https://www.baidu.com']);
     }
 }

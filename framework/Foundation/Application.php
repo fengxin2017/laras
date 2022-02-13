@@ -548,6 +548,16 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
+     * Determine if application is in local environment.
+     *
+     * @return bool
+     */
+    public function isLocal()
+    {
+        return $this['env'] === 'local';
+    }
+
+    /**
      * Determine if application is in production environment.
      *
      * @return bool
