@@ -6,9 +6,8 @@ use Illuminate\Config\Repository;
 use Illuminate\Contracts\Config\Repository as RepositoryContract;
 use Illuminate\Support\ServiceProvider;
 use Laras\Foundation\Application;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Finder\Finder;
 use SplFileInfo;
+use Symfony\Component\Finder\Finder;
 
 class ConfigServiceProvider extends ServiceProvider
 {
@@ -22,7 +21,7 @@ class ConfigServiceProvider extends ServiceProvider
         $this->app->instance(RepositoryContract::class, $repository = new Repository());
         $this->loadConfigurationFiles($repository);
         $this->app->alias(RepositoryContract::class, 'config');
-        $this->app['env'] = (new ArgvInput())->getParameterOption('--env') ?: $repository['app.env'];
+        $this->app['env'] = $repository['app.env'] ?? 'local';
     }
 
     /**
