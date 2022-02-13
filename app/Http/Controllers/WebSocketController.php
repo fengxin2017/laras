@@ -42,7 +42,6 @@ HTML;
     public function hello(Request $request, Response $response)
     {
         var_dump($request->getFrame());
-        return 'hello lily';
         //var_dump($request->getMessage());
         return $response->setWebSocketResponseData('hello client');
     }

@@ -46,8 +46,8 @@ class ConsumerProcess extends Process
                     foreach ($readyJobs as $job) {
                         $wg->add();
                         try {
-                            $job = unserialize($job);
                             Coroutine::create(function () use ($job, $wg) {
+                                $job = unserialize($job);
                                 $job->handle();
                                 $wg->done();
                             });
@@ -60,6 +60,7 @@ class ConsumerProcess extends Process
                     $wg->wait();
                 }
             }
+            Coroutine::sleep(1);
         }
     }
 }
