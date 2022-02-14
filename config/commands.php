@@ -2,10 +2,10 @@
 
 use App\Commands\KeyGenerateCommand;
 use App\Commands\TestCommand;
-use Laras\Commands\Portal;
+use Laras\Commands\Start;
 
 return [
-    Portal::class,
+    Start::class,
     TestCommand::class,
     KeyGenerateCommand::class
 ];

@@ -25,7 +25,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class Portal extends Command
+class Start extends Command
 {
     /**
      * @var InputInterface $input
