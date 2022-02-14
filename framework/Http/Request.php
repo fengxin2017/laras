@@ -2,8 +2,10 @@
 
 namespace Laras\Http;
 
+use Illuminate\Support\Str;
 use Laras\Contracts\Auth\Authenticatable;
 use Swoole\Http\Request as SwooleRequest;
+use Symfony\Component\HttpFoundation\AcceptHeader;
 
 class Request
 {
@@ -138,6 +140,53 @@ class Request
     public function user()
     {
         return $this->user;
+    }
+
+    public function expectsJson()
+    {
+        return ($this->ajax() && !$this->pjax() && $this->acceptsAnyContentType()) || $this->wantsJson();
+    }
+
+    /**
+     * Determine if the request is the result of an AJAX call.
+     *
+     * @return bool
+     */
+    public function ajax()
+    {
+        return $this->isXmlHttpRequest();
+    }
+
+    public function isXmlHttpRequest()
+    {
+        return 'XMLHttpRequest' == ($this->header['x-requested-with'] ?? null);
+    }
+
+    public function pjax()
+    {
+        return ($this->header['x-pjax'] ?? null) == true;
+    }
+
+    public function acceptsAnyContentType()
+    {
+        $acceptable = $this->getAcceptableContentTypes();
+
+        return count($acceptable) === 0 || (
+                isset($acceptable[0]) && ($acceptable[0] === '*/*' || $acceptable[0] === '*')
+            );
+    }
+
+
+    public function getAcceptableContentTypes()
+    {
+        return array_keys(AcceptHeader::fromString($this->header['accept'] ?? null)->all());
+    }
+
+    public function wantsJson()
+    {
+        $acceptable = $this->getAcceptableContentTypes();
+
+        return isset($acceptable[0]) && Str::contains(strtolower($acceptable[0]), ['/json', '+json']);
     }
 
     /**

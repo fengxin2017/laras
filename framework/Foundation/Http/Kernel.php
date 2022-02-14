@@ -13,9 +13,9 @@ use Illuminate\Contracts\View\View;
 use Laras\Contracts\Foundation\Application;
 use Laras\Contracts\Http\Kernel as KernelContract;
 use Laras\Facades\Log;
+use Laras\Http\Pipeline;
 use Laras\Http\Request;
 use Laras\Http\Response;
-use Laras\Http\Pipeline;
 use Laras\Router\Router;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
@@ -70,17 +70,25 @@ class Kernel implements KernelContract
             $larasResponse->setChunkLimit($this->app['config']['server.http.buffer_output_size']);
 
             if ($response === Dispatcher::METHOD_NOT_ALLOWED) {
-                $larasResponse->setStatus(StatusCodeInterface::STATUS_METHOD_NOT_ALLOWED);
-                $larasResponse->setContent('METHOD NOT ALLOWED!');
-                $larasResponse->send();
-                return;
-            }
-
-            if ($response === Dispatcher::NOT_FOUND) {
-                $larasResponse->setStatus(StatusCodeInterface::STATUS_NOT_FOUND);
-                $larasResponse->setContent('ROUTE NOT FOUND!');
-                $larasResponse->send();
-                return;
+                throw new MethodNotAllowedException();
+                if ($larasRequest->expectsJson()) {
+                    $response = [
+                        'status' => StatusCodeInterface::STATUS_METHOD_NOT_ALLOWED,
+                        'message' => 'METHOD NOT ALLOWED'
+                    ];
+                } else {
+                    $response = view('errors::404');
+                }
+            } else if ($response === Dispatcher::NOT_FOUND) {
+                throw new HttpNotFoundException();
+                if ($larasRequest->expectsJson()) {
+                    $response = [
+                        'status' => StatusCodeInterface::STATUS_NOT_FOUND,
+                        'message' => 'ROUTE NOT FOUND'
+                    ];
+                } else {
+                    $response = view('errors::404');
+                }
             }
 
             if ($response instanceof Response) {

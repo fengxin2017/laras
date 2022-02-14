@@ -15,6 +15,7 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Validation\ValidationException;
+use Laras\Contracts\Auth\Authenticatable;
 use Laras\Facades\Auth;
 use Laras\Facades\DB;
 use Laras\Facades\Mail;
@@ -22,6 +23,7 @@ use Laras\Facades\Storage;
 use Laras\Facades\View;
 use Laras\Http\Request;
 use Laras\Http\Response;
+use Laras\Support\Annotation\Inject;
 use Laras\Support\Annotation\Middleware;
 
 /**
@@ -30,37 +32,38 @@ use Laras\Support\Annotation\Middleware;
  */
 class HttpController extends BaseController
 {
-    public function index(Request $request)
-    {
-        User::query()->first();
-        return 3333;
-//        var_dump($request->get('foo'));
-        //$user = User::query()->first();
-        //return $user;
-        //DB::table('user')->first();
+    /**
+     * @Inject(Client::class)
+     * @var Client $client
+     */
+    protected $client;
 
-//        return $user;
-//        return DB::table('users')->get();
-//        $user = User::query()->first();
-        return '333333555555556669999';
+    public function index(Request $request, Response $response, string $name)
+    {
+        var_dump($name);
+        var_dump($request->get());
     }
 
     public function login(Request $request)
     {
-        $user = User::find(1);
+        /**@var Authenticatable $user */
+        $user = User::query()->find(1);
         return Auth::jwtloginUser($user, 3600);
     }
 
+    /**
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function testAuth()
     {
-        $client = new Client();
-        $response = $client->request('get','192.168.10.10:9501/auth',[
+        $response = $this->client->request('get', '192.168.10.10:9501/auth', [
             'headers' => [
                 'token' => 'eyJpdiI6Ikd3ZU5CR0RGQUNLNlZFR1ZxOThrNUE9PSIsInZhbHVlIjoiQ3M0L0QxZ0M2Qkc4a3ZPdjd5RHNJODJVZlM5Y0Y4cWZQMTJCbkhWQkp2T2tjWnVPN3VCV2tITVJnWFEwa0RrUCIsIm1hYyI6IjRkMjc4ZWNhNzQxNzdlYjJjODRhNzAzYmNmMmM1YTdmNzQ4NjE2YjU4MmJlYWYyNzI2MTNhMDE0Y2M2Y2FiZjkifQ=='
             ]
         ]);
 
-        return json_decode($response->getBody()->getContents(),true);
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     /**
@@ -71,28 +74,21 @@ class HttpController extends BaseController
     public function auth(Request $request)
     {
         return \Laras\Facades\Request::user();
-        return $request->user();
-        return Auth::user();
-    }
-
-    /**
-     * http://192.168.10.10:9503/inject/fenxin?foo=bar
-     *
-     * @param Request $request
-     * @param Response $response
-     * @param string $name
-     */
-    public function inject(Request $request, Response $response, string $name)
-    {
-        var_dump($name);
-        var_dump($request->get());
+        //return $request->user();
+        //return Auth::user();
     }
 
     public function response(Response $response, Request $request)
     {
-        Mail::to('2169046620@qq.com')->send(new TestMail());
+        // $foo = $request->get('foo'));
+        // $foo = \Laras\Facades\Request::get('foo');
+        // $post = $request->post();
+        // $file = $request->file('file');
         // 响应一个字符串
         return 'string';
+        // 发送邮件
+        Mail::to('2169046620@qq.com')->send(new TestMail());
+        return 'done';
         // 响应DB
         return DB::table('users')->first();
         // 响应ORM分页
@@ -108,9 +104,9 @@ class HttpController extends BaseController
         // 下载文件
         return $response->download(storage_path('app/file.txt'));
         // 跳转uri
-        return Response::route('test/test');
+        return Response::route('test');
         // 全路径跳转
-        return Response::redirect();
+        return Response::redirect('https://learnku.com/laravel');
         // 指定驱动下载文件  自带 AWS 、 FTP 、SFTP 3种驱动
         return Storage::disk('local')->download('file.txt');
 
@@ -129,11 +125,11 @@ class HttpController extends BaseController
      */
     public function middleware(Response $response)
     {
-        return 'done11';
+        return 'done';
     }
 
     /**
-     * 传递参数到middleware必须使用{}形式
+     * 限流传递参数到middleware必须使用{}形式
      * @Middleware({RateLimitor::class:"1,2",Jim::class})
      * @return string
      */
@@ -144,6 +140,7 @@ class HttpController extends BaseController
     }
 
     /**
+     * 事件
      * @throws Exception
      */
     public function event()
@@ -152,13 +149,14 @@ class HttpController extends BaseController
     }
 
     /**
+     * 任务
      * @throws BindingResolutionException
      */
     public function job()
     {
         $count = 100;
         var_dump(Carbon::now()->toDateTimeString());
-        while ($count > 0){
+        while ($count > 0) {
             FooJob::dispatch(['name' => 'take idea on test queue!->>>>' . $count])->delay(Carbon::now()->addSeconds(4))->onQueue('test');
             FooJob::dispatch(['name' => 'take idea on default queue!->>>>' . $count])->delay(Carbon::now()->addSeconds(5));
             $count--;

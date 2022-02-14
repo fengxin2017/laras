@@ -31,7 +31,7 @@ return [
         ]
     ],
     'websocket' => [
-        'worker_number' => 0,
+        'worker_number' => swoole_cpu_num(),
         'listen' => '0.0.0.0',
         'port' => 9502,
         'ssl' => false,
@@ -51,7 +51,7 @@ return [
         ]
     ],
     'tcp' => [
-        'worker_number' => 0,
+        'worker_number' => swoole_cpu_num(),
         'listen' => '0.0.0.0',
         'port' => 9503,
         'ssl' => false,

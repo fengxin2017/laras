@@ -4,11 +4,11 @@
 namespace Laras\Auth;
 
 
+use Exception;
 use Laras\Contracts\Auth\Authenticatable;
 use Laras\Facades\Crypt;
 use Laras\Facades\Redis;
 use Laras\Facades\Request;
-use Exception;
 
 class AuthManager
 {
@@ -50,8 +50,11 @@ class AuthManager
      * @return bool
      * @throws Exception
      */
-    public function attemptWithToken(string $token)
+    public function attemptWithToken(?string $token = null)
     {
+        if (is_null($token)) {
+            return false;
+        }
         if ($user = $this->userProvider->retrieveByToken($token)) {
             $this->setToken($token);
             $this->user = $user;

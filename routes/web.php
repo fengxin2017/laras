@@ -3,8 +3,7 @@
 use App\Http\Controllers\HttpController;
 use Laras\Router\Router;
 
-Router::get('index',[HttpController::class,'index']);
-Router::get('inject/{name}',[HttpController::class,'inject']);
+Router::get('index/{name}',[HttpController::class,'index']);
 Router::get('response',[HttpController::class,'response']);
 Router::get('middleware', [HttpController::class, 'middleware']);
 Router::get('event',[HttpController::class,'event']);

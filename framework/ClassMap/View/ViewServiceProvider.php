@@ -9,6 +9,8 @@ use Illuminate\View\Engines\CompilerEngine;
 use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\Engines\FileEngine;
 use Illuminate\View\Engines\PhpEngine;
+use Laras\Foundation\Exceptions\RegisterErrorViewPaths;
+use Exception;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -152,5 +154,15 @@ class ViewServiceProvider extends ServiceProvider
         $resolver->register('blade', function () {
             return new CompilerEngine($this->app['blade.compiler'], $this->app['files']);
         });
+    }
+
+    /**
+     * 注册异常渲染页面
+     *
+     * @throws Exception
+     */
+    public function boot()
+    {
+        (new RegisterErrorViewPaths())();
     }
 }
