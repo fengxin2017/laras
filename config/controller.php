@@ -1,7 +1,7 @@
 <?php
 
 return [
-    // 开启控制器连接池请勿在controller使用属性注解进行注入
-    'enable_pool' => false,
+    // if controller exist annotation Inject, controller pool will not be created
+    'enable_pool' => true,
     'pool_number' => 150
 ];

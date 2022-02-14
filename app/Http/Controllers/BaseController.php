@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Validation\ValidationException;
 use Laras\Facades\ValidatorFactory;
+use Laras\Http\Request;
+use Laras\Support\Annotation\Inject;
 
 /**
  * Class BaseController
@@ -13,6 +15,11 @@ use Laras\Facades\ValidatorFactory;
  */
 class BaseController
 {
+    /**
+     * @Inject(Request::class)
+     * @var Request $request
+     */
+    protected $request;
     /**
      * Controller constructor.
      */

@@ -31,12 +31,17 @@ class AnnotationCollector
         $methodName = $method->getName();
 
         if (isset(self::$container[$className]['m'][$methodName])) {
-            self::$container[$className]['m'][$methodName] = array_merge(
-                self::$container[$className]['m'][$methodName],
-                $annotations
-            );
+            foreach ($annotations as $annotation) {
+                if (!in_array(get_class($annotation), self::$container['__annotation_classname'][$className]['m'][$methodName])) {
+                    self::$container[$className]['p'][$methodName][] = $annotation;
+                    self::$container['__annotation_classname'][$className]['m'][$methodName][] = get_class($annotation);
+                }
+            }
         } else {
             self::$container[$className]['m'][$methodName] = $annotations;
+            foreach ($annotations as $annotation) {
+                self::$container['__annotation_classname'][$className]['m'][$methodName][] = get_class($annotation);
+            }
         }
     }
 
@@ -47,12 +52,17 @@ class AnnotationCollector
         $propertyName = $property->getName();
 
         if (isset(self::$container[$className]['p'][$propertyName])) {
-            self::$container[$className]['p'][$propertyName] = array_merge(
-                self::$container[$className]['p'][$propertyName],
-                $annotations
-            );
+            foreach ($annotations as $annotation) {
+                if (!in_array(get_class($annotation), self::$container['__annotation_classname'][$className]['p'])) {
+                    self::$container[$className]['p'][$propertyName][] = $annotation;
+                    self::$container['__annotation_classname'][$className]['p'][] = get_class($annotation);
+                }
+            }
         } else {
             self::$container[$className]['p'][$propertyName] = $annotations;
+            foreach ($annotations as $annotation) {
+                self::$container['__annotation_classname'][$className]['p'][] = get_class($annotation);
+            }
         }
     }
 

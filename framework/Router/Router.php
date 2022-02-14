@@ -10,10 +10,12 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Arr;
 use Laras\Annotation\AnnotationCollector;
 use Laras\Foundation\Application;
+use Laras\Http\Pipeline;
 use Laras\Http\Request;
 use Laras\Http\Response;
-use Laras\Http\Pipeline;
+use Laras\Support\Annotation\Inject;
 use Laras\Support\Annotation\Middleware;
+use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -108,9 +110,13 @@ class Router
 
 
         $middleware = $this->getMiddleware($httpMethod, $class, $method);
-        if ($this->enableControllerPool) {
+
+        //  if controller has inject property we should not create controller pool cause the controller
+        //  maybe inject instance like "Request::class"
+        if ($this->shouldCreateControllerPool($class)) {
             $this->createControllerPool($class);
         }
+
         $controller = $this->getController($class, $method);
         $controllerMethodParams = $this->getControllerMethodParams($class, $method, $inputs);
 
@@ -129,10 +135,61 @@ class Router
         } catch (Throwable $throwable) {
             throw $throwable;
         } finally {
-            if ($this->enableControllerPool) {
+            if ($this->enableControllerPool && isset($this->controllerPool[$class])) {
                 $this->controllerPool[$class]->push($controller);
             }
         }
+    }
+
+    /**
+     * @param string $class
+     * @return bool
+     * @throws ReflectionException
+     */
+    protected function shouldCreateControllerPool(string $class)
+    {
+        if ($this->enableControllerPool) {
+            if (isset(AnnotationCollector::get($class)['p'])) {
+                $enable = $this->classExistInjectAnnotation(AnnotationCollector::get($class)['p']);
+                if (false == $enable) {
+                    return false;
+                }
+            }
+
+            // ensure there is not inject property in parent class
+            $reflectClass = new ReflectionClass($class);
+            while ($parentReflectClass = $reflectClass->getParentClass()) {
+                if (isset(AnnotationCollector::get($parentReflectClass->getName())['p'])) {
+                    $enable = $this->classExistInjectAnnotation(AnnotationCollector::get($parentReflectClass->getName())['p']);
+                    if (false == $enable) {
+                        return false;
+                    }
+                }
+
+                $reflectClass = $parentReflectClass;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $annotations
+     * @return bool
+     */
+    protected function classExistInjectAnnotation(array $annotations)
+    {
+        foreach ($annotations as $propertyAnnotations) {
+            foreach ($propertyAnnotations as $propertyAnnotation) {
+                if ($propertyAnnotation instanceof Inject) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -155,7 +212,7 @@ class Router
      */
     protected function getController(string $class, string $method)
     {
-        if ($this->enableControllerPool) {
+        if ($this->enableControllerPool && isset($this->controllerPool[$class])) {
             $channel = $this->controllerPool[$class];
             $createdNum = $this->controllerPoolCreatedNum[$class];
 
@@ -199,8 +256,13 @@ class Router
                         $annotationMiddlewares = [];
                         foreach (Arr::wrap($annotation->middlewares['value']) as $key => $annotationMiddlewareOrParams) {
                             if (is_numeric($key)) {
+                                // @SomeAnnotation(Foo::class)
+                                //  $annotationMiddlewareOrParams will be annotation class
                                 $annotationMiddlewares[] = $annotationMiddlewareOrParams;
                             } else {
+                                // @SomeAnnotation({Foo::class:"1,3,4"})
+                                // $key will be annotation class
+                                // $annotationMiddlewareOrParams will be params
                                 $annotationMiddlewares[] = $key . ':' . $annotationMiddlewareOrParams;
                             }
                         }
@@ -227,29 +289,21 @@ class Router
     {
         $params = [];
 
-        if ($this->enableControllerPool) {
-            foreach ($this->controllerMethodParams[$class][$method] as $parameter) {
-                /**@var ReflectionParameter $parameter */
-                $name = $parameter->getName();
-                if (in_array($name, array_keys($inputs))) {
-                    $params[] = $inputs[$name];
-                } else {
-                    $params[] = $this->app->coMake(
-                        Util::getParameterClassName($parameter)
-                    );
-                }
-            }
+        if ($this->enableControllerPool && isset($this->controllerPool[$class])) {
+            $parameters = $this->controllerMethodParams[$class][$method];
         } else {
             $parameters = (new ReflectionMethod($class, $method))->getParameters();
-            foreach ($parameters as $parameter) {
-                $name = $parameter->getName();
-                if (in_array($name, array_keys($inputs))) {
-                    $params[] = $inputs[$name];
-                } else {
-                    $params[] = $this->app->coMake(
-                        Util::getParameterClassName($parameter)
-                    );
-                }
+        }
+
+        foreach ($parameters as $parameter) {
+            /**@var ReflectionParameter $parameter */
+            $name = $parameter->getName();
+            if (in_array($name, array_keys($inputs))) {
+                $params[] = $inputs[$name];
+            } else {
+                $params[] = $this->app->coMake(
+                    Util::getParameterClassName($parameter)
+                );
             }
         }
 
@@ -261,7 +315,6 @@ class Router
      * @param array $parameters
      * @return mixed
      * @throws BindingResolutionException
-     * @throws ReflectionException
      */
     public static function __callStatic(string $method, array $parameters)
     {
