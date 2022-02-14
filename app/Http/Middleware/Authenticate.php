@@ -22,6 +22,7 @@ class Authenticate
      */
     public function handle(Request $request, Response $response, Closure $next)
     {
+        // case use token in request header
         if (Auth::jwtCheck()) {
             return $next($request, $response);
         }
