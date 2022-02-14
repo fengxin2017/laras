@@ -1,7 +1,11 @@
 <?php
 
+use App\Commands\KeyGenerateCommand;
+use App\Commands\TestCommand;
+use Laras\Commands\Portal;
+
 return [
-    \Laras\Commands\Portal::class,
-    \App\Commands\TestCommand::class,
-    \App\Commands\KeyGenerateCommand::class
+    Portal::class,
+    TestCommand::class,
+    KeyGenerateCommand::class
 ];

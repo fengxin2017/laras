@@ -1,5 +1,7 @@
 <?php
 
+use App\Aspects\FooAspect;
+
 return [
-    \App\Aspects\FooAspect::class
+    FooAspect::class
 ];

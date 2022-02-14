@@ -1,17 +1,35 @@
 <?php
 
 use App\Providers\RouterServiceProvider;
+use Illuminate\Encryption\EncryptionServiceProvider;
 use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Hashing\HashServiceProvider;
 use Illuminate\Log\LogServiceProvider;
 use Illuminate\Mail\MailServiceProvider;
+use Illuminate\Support\Arr;
 use Illuminate\Translation\TranslationServiceProvider;
 use Illuminate\Validation\ValidationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
+use Laras\AsyncQueue\ConsumerProcess;
 use Laras\Auth\AuthServiceProvider;
+use Laras\Crontab\CrontabProcess;
 use Laras\Database\DatabaseServiceProvider;
+use Laras\Facades\Auth;
+use Laras\Facades\Config;
+use Laras\Facades\DB;
+use Laras\Facades\Hash;
+use Laras\Facades\Log;
+use Laras\Facades\Mail;
+use Laras\Facades\Redis;
+use Laras\Facades\Request;
+use Laras\Facades\Response;
+use Laras\Facades\Storage;
+use Laras\Facades\Translator;
+use Laras\Facades\ValidatorFactory;
+use Laras\Facades\View;
 use Laras\Redis\RedisServiceProvider;
-use Illuminate\Encryption\EncryptionServiceProvider;
+use Laras\Support\Aspect\ControllerAspect;
+use Laras\Support\Aspect\InjectAspect;
 
 return [
     /*
@@ -145,20 +163,20 @@ return [
     |
     */
     'aliases' => [
-        'Arr' => \Illuminate\Support\Arr::class,
-        'Auth' => \Laras\Facades\Auth::class,
-        'Config' => \Laras\Facades\Config::class,
-        'DB' => \Laras\Facades\DB::class,
-        'Log' => \Laras\Facades\Log::class,
-        'Redis' => \Laras\Facades\Redis::class,
-        'Request' => \Laras\Facades\Request::class,
-        'Response' => \Laras\Facades\Response::class,
-        'Translator' => \Laras\Facades\Translator::class,
-        'ValidatorFactory' => \Laras\Facades\ValidatorFactory::class,
-        'Storage' => \Laras\Facades\Storage::class,
-        'View' => \Laras\Facades\View::class,
-        'Mail' => \Laras\Facades\Mail::class,
-        'Hash' => \Laras\Facades\Hash::class
+        'Arr' => Arr::class,
+        'Auth' => Auth::class,
+        'Config' => Config::class,
+        'DB' => DB::class,
+        'Log' => Log::class,
+        'Redis' => Redis::class,
+        'Request' => Request::class,
+        'Response' => Response::class,
+        'Translator' => Translator::class,
+        'ValidatorFactory' => ValidatorFactory::class,
+        'Storage' => Storage::class,
+        'View' => View::class,
+        'Mail' => Mail::class,
+        'Hash' => Hash::class
     ],
 
     'annotation' => [
@@ -166,10 +184,10 @@ return [
             ROOT_PATH . DIRECTORY_SEPARATOR . 'app',
         ],
         'classes' => [
-            \Laras\Support\Aspect\ControllerAspect::class,
-            \Laras\Support\Aspect\InjectAspect::class,
-            \Laras\Crontab\CrontabProcess::class,
-            \Laras\AsyncQueue\ConsumerProcess::class,
+            ControllerAspect::class,
+            InjectAspect::class,
+            CrontabProcess::class,
+            ConsumerProcess::class,
         ],
     ]
 ];
