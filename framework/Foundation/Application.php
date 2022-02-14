@@ -4,7 +4,6 @@ namespace Laras\Foundation;
 
 use App\Providers\EventServiceProvider;
 use Dotenv\Dotenv;
-use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Env;
@@ -20,11 +19,10 @@ use Laras\Foundation\Http\Kernel;
 use Laras\Foundation\Tcp\Kernel as TcpKernel;
 use Laras\Foundation\WebSocket\Kernel as WebSocketKernel;
 use Laras\Http\Pipeline as HttpPipeline;
-use Laras\Websocket\Pipeline as WebsocketPipeline;
 use Laras\Server\HttpServer;
 use Laras\Server\TcpServer;
 use Laras\Server\WebsocketServer;
-use ReflectionException;
+use Laras\Websocket\Pipeline as WebsocketPipeline;
 use Swoole\Coroutine\Context;
 use Swoole\Process;
 use Swoole\Process\Pool;
@@ -88,12 +86,10 @@ class Application extends Container implements ApplicationContract
 
     /**
      * Application constructor.
-     * @param Pool|null $pool
-     * @param Process|null $worker
+     * @param Pool $pool
+     * @param Process $worker
      * @param string $server
      * @throws BindingResolutionException
-     * @throws ReflectionException
-     * @throws Exception
      */
     public function __construct(Pool $pool, Process $worker, string $server)
     {
@@ -294,9 +290,6 @@ class Application extends Container implements ApplicationContract
         return $this['env'];
     }
 
-    /**
-     * @throws Exception
-     */
     public function registerBaseBindings()
     {
         static::setInstance($this);
