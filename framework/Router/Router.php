@@ -288,7 +288,7 @@ class Router
     protected function getControllerMethodParams(string $class, string $method, $inputs)
     {
         $params = [];
-
+        var_dump($class);
         if ($this->enableControllerPool && isset($this->controllerPool[$class])) {
             $parameters = $this->controllerMethodParams[$class][$method];
         } else {

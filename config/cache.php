@@ -10,6 +10,6 @@ return [
         'idletime' => 60,
         'host' => 'localhost',
         'port' => '6379',
-        'auth' => ''
+        'auth' => '123456'
     ]
 ];

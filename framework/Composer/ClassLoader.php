@@ -33,42 +33,42 @@ class ClassLoader
     /**
      * @var ComposerClassLoader
      */
-    protected $composerClassLoader;
+    protected ComposerClassLoader $composerClassLoader;
 
     /**
      * @var array
      */
-    protected $proxies;
+    protected array $proxies;
 
     /**
      * @var Finder $finder
      */
-    protected $finder;
+    protected Finder $finder;
 
     /**
-     * @var string
+     * @var string $scanCachePath
      */
-    protected $scanCachePath = ROOT_PATH . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . 'container' . DIRECTORY_SEPARATOR . 'scan.cache';
+    protected string $scanCachePath = ROOT_PATH . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . 'container' . DIRECTORY_SEPARATOR . 'scan.cache';
 
     /**
-     * @var string
+     * @var string $serviceClassMapDir
      */
-    protected $serviceClassMapDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'ClassMap' . DIRECTORY_SEPARATOR;
+    protected string $serviceClassMapDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'ClassMap' . DIRECTORY_SEPARATOR;
 
     /**
-     * @var string
+     * @var string $runtimeProxyDir
      */
-    protected $runtimeProxyDir = ROOT_PATH . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . 'container' . DIRECTORY_SEPARATOR . 'proxy' . DIRECTORY_SEPARATOR;
+    protected string $runtimeProxyDir = ROOT_PATH . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . 'container' . DIRECTORY_SEPARATOR . 'proxy' . DIRECTORY_SEPARATOR;
 
     /**
-     * @var string
+     * @var string $classMapDir
      */
-    protected $classMapDir = ROOT_PATH . DIRECTORY_SEPARATOR . 'class_map' . DIRECTORY_SEPARATOR;
+    protected string $classMapDir = ROOT_PATH . DIRECTORY_SEPARATOR . 'class_map' . DIRECTORY_SEPARATOR;
 
     /**
-     * @var self
+     * @var self $instance
      */
-    public static $instance;
+    public static self $instance;
 
     /**
      * ClassLoader constructor.
@@ -118,7 +118,6 @@ class ClassLoader
         // Register Property Handler.
         RegisterInjectPropertyHandler::register();
 
-        // 这个不开子进程，无法使用当前COMPOSER的loadClass方法 目前不知道原因
         $pid = pcntl_fork();
 
         if ($pid == -1) {

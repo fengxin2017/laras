@@ -40,7 +40,8 @@
         "swoole/ide-helper": "master",
         "symfony/console": "^5.1.4",
         "symfony/finder": "5.1.4",
-        "vlucas/phpdotenv": "^5.2.0"
+        "vlucas/phpdotenv": "^5.2.0",
+        "ext-inotify": "*"
     },
     "config": {
         "optimize-autoloader": true,

@@ -42,6 +42,7 @@ class HttpController extends BaseController
     {
         var_dump($name);
         var_dump($request->get());
+        return compact('name');
     }
 
     public function login(Request $request)

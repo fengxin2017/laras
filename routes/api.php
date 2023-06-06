@@ -10,8 +10,4 @@ Router::addGroup('/v1', function () {
     'middleware' => \App\Http\Middleware\Foo::class
 ]);
 
-Router::get('/test/test', [HttpController::class, 'test'], [
-    //'middleware' => \App\Http\Middleware\Foo::class
-]);
-
-Router::get('/test/index',[HttpController::class,'index']);
+Router::post('/test/index/{name}',[HttpController::class,'index']);
